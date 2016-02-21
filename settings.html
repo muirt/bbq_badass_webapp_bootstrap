@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <title>BBQ Badass Settings</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />    <meta name="description" content="">
+ 
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/font-style.css" rel="stylesheet">
+   
+    
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="settings.js">  </script>
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+  	<!-- Google Fonts call. Font Used Open Sans & Raleway -->
+	<link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
+  	<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
+  </head>
+  <body>
+  
+  	<!-- NAVIGATION MENU -->
+
+    <div class="navbar-nav navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+          <button type="button"  class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- <button type="button" id="fullscreen_button" class="btn btn-mini pull-right">Fullscreen</button> -->
+          <a class="navbar-brand" href="index.html"><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass Settings</a>
+          </div> 
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li ><a href="index.html" class="menu_link"><i class="icon-home icon-white "></i> Home</a></li>
+              <li class="active"><a href="settings.html" class="menu_link"><i class="icon-folder-open icon-white"></i> Settings</a></li>
+              <li><a href="recording.html" class="menu_link"><i class="icon-folder-open icon-white "></i> Recording</a></li>
+            </ul>
+          </div>         
+        </div>
+    </div>
+
+    <div class="container">
+
+	  <!-- FIRST ROW OF BLOCKS -->     
+      <div class="row">
+
+      <div class="half-unit tiny">
+            <dtitle  id="connected_label">Not Connected</dtitle>         
+      </div>   
+      		<div class="half-unit medium">
+	      		<dtitle>Hysteresis </dtitle>
+	      		<hr> 	    
+            
+              <div class="cont"> 
+              <div id="hysteresis_control" class="input-group pull-right">
+                <input type="text" id="hysteresis_input" class="form-control" value="4">
+                <span class="input-group-btn">
+                  <button id="hystersis_plus_button" class="btn btn-danger" type="button">+</button>
+                  <button id="hystersis_minus_button" class="btn btn-primary" type="button">-</button>
+                </span>
+              </div>
+            </div>
+            
+			    </div>
+
+          <div class="half-unit medium">
+            <dtitle>Goal Meat Temperature </dtitle>
+            <hr> 
+            <div class="cont"> 
+              <div id="goal_meat_control" class="input-group pull-right">
+                <input type="text" id="goal_meat_input" class="form-control" value="4">
+                <span class="input-group-btn">
+                  <button id="goal_meat_save_button" class="btn btn-primary" type="button">Save</button>                 
+                </span>
+              </div>
+            </div>           
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Temperature Units </dtitle>
+            <hr>    
+            <div class="switch pull-right unit_switch" id="unit_control">
+              <input type="radio" class="switch-input unit_switch" name="unit" value="C" id="c" checked="">
+              <label for="c" class="switch-label switch-label-off unit_switch" >C</label>
+              <input type="radio" class="switch-input unit_switch" name="unit" value="F" id="f">
+              <label for="f" class="switch-label switch-label-on unit_switch">F</label>
+              <span class="switch-selection"></span>
+            </div>         
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Debug </dtitle>
+            <hr>     
+            <div class="switch pull-right" id="debug_control">
+              <input type="radio" class="switch-input pull-right" name="view" value="on" id="on" checked="">
+              <label for="on" class="switch-label switch-label-off">On</label>
+              <input type="radio" class="switch-input" name="view" value="off" id="off">
+              <label for="off" class="switch-label switch-label-on">Off</label>
+              <span class="switch-selection"></span>
+            </div>        
+          </div>
+
+     	 
+      		</div><!-- /row -->
+      	</div><!-- /container -->		
+	</div><!-- /footerwrap -->
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+	<!--script type="text/javascript" src="assets/js/lineandbars.js"></script-->
+    
+	<!--script type="text/javascript" src="assets/js/dash-charts.js"></script-->
+	<!--script type="text/javascript" src="assets/js/gauge.js"></script-->
+	
+	<!-- NOTY JAVASCRIPT -->
+	<script type="text/javascript" src="assets/js/noty/jquery.noty.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/top.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topLeft.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topRight.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topCenter.js"></script>
+	
+	<!-- You can add more layouts if you want -->
+	<script type="text/javascript" src="assets/js/noty/themes/default.js"></script>
+    <!-- <script type="text/javascript" src="assets/js/dash-noty.js"></script> This is a Noty bubble when you init the theme-->
+	<!--script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script-->
+	<!--script src="assets/js/jquery.flexslider.js" type="text/javascript"></script-->
+
+    <!--script type="text/javascript" src="assets/js/admin.js"></script-->
+  
+</body></html>

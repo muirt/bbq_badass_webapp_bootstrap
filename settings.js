@@ -1,6 +1,4 @@
 var socketaddyLocal= "ws://192.168.0.2:9001";
-
-
 var socketaddyInternet = "ws://bbqba.ddns.net:9001";
 var sock;			
 
@@ -210,8 +208,6 @@ function displayConnected()
 
 $(document).ready(function(){
 
-
-	
 	var localSock = new WebSocket(socketaddyLocal);
 	var internetSock = new WebSocket(socketaddyInternet);
 	
@@ -258,13 +254,6 @@ $(document).ready(function(){
 		
 	});
 	
-	if(window.navigator.standalone == true) {
- 		$('#fullscreen_button').css({'visibility': 'hidden'})
-	}
-
-	$('#fullscreen_button').on('click', function(e){
-		$('#fullscreen_button').text("Exit Fullscreen");
-	});
 
 	$('#set_point_increase_button').on('click', function(e){
 		
