@@ -47,21 +47,22 @@
     <div class="navbar-nav navbar-inverse navbar-fixed-top">
         <div class="container">
         <div class="navbar-header">
-          <button type="button"  class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <<!-- button type="button"  class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>
+          </button> -->
           <!-- <button type="button" id="fullscreen_button" class="btn btn-mini pull-right">Fullscreen</button> -->
           <a class="navbar-brand" href="index.html"><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass</a>
           </div> 
-          <div class="navbar-collapse collapse">
+          
+          <!-- <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="index.html" class="menu_link"><i class="icon-home icon-white "></i> Home</a></li>
               <li><a href="settings.html" class="menu_link"><i class="icon-folder-open icon-white "></i> Settings</a></li>
               <li><a href="recording.html" class="menu_link"><i class="icon-folder-open icon-white "></i> Recording</a></li>
             </ul>
-          </div>         
+          </div>   -->       
         </div>
     </div>
 
@@ -144,7 +145,90 @@
             
            </div>	
 			
- -->
+
+ -->     
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Hysteresis </dtitle>
+            <hr>      
+            
+              <div class="cont"> 
+              <div id="hysteresis_control" class="input-group pull-right">
+                <input type="text" id="hysteresis_input" class="form-control" value="4">
+                <span class="input-group-btn">
+                  <button id="hystersis_plus_button" class="btn btn-danger" type="button">+</button>
+                  <button id="hystersis_minus_button" class="btn btn-primary" type="button">-</button>
+                </span>
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Goal Meat Temperature </dtitle>
+            <hr> 
+            <div class="cont"> 
+              <div id="goal_meat_control" class="input-group pull-right">
+                <input type="text" id="goal_meat_input" class="form-control" value="4">
+                <span class="input-group-btn">
+                  <button id="goal_meat_save_button" class="btn btn-primary" type="button">Save</button>                 
+                </span>
+              </div>
+            </div>           
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Temperature Units </dtitle>
+            <hr>    
+            <div class="switch pull-right unit_switch" id="unit_control">
+              <input type="radio" class="switch-input unit_switch" name="unit" value="C" id="c" checked="">
+              <label for="c" class="switch-label switch-label-off unit_switch" >C</label>
+              <input type="radio" class="switch-input unit_switch" name="unit" value="F" id="f">
+              <label for="f" class="switch-label switch-label-on unit_switch">F</label>
+              <span class="switch-selection"></span>
+            </div>         
+          </div>
+
+          <div class="half-unit medium">
+            <dtitle>Debug </dtitle>
+            <hr>     
+            <div class="switch pull-right" id="debug_control">
+              <input type="radio" class="switch-input pull-right" name="view" value="on" id="on" checked="">
+              <label for="on" class="switch-label switch-label-off">On</label>
+              <input type="radio" class="switch-input" name="view" value="off" id="off">
+              <label for="off" class="switch-label switch-label-on">Off</label>
+              <span class="switch-selection"></span>
+            </div>        
+          </div>   
+          <div class="half-unit">
+            <dtitle>Current Recording</dtitle>
+            <hr>
+            <div class="cont"> 
+                <button type="button" class="btn btn-primary btn-secondary pull-right" id="current_recording_stop_button">Stop</button>
+                <button type="button" class="btn btn-warning btn-secondary pull-right" id="current_recording_graph_button">Graph</button>
+            </div>
+          </div>
+
+          <div class="half-unit">
+            <dtitle>New Recording</dtitle>
+            <hr>
+            <div class="cont"> 
+              <div id="new_recording_control " class="input-group pull-right">
+                <input type="text" id="new_recording_input" class="form-control pull-right" value="4">
+                <span class="input-group-btn">
+                  <button id="new_recording_button" class="btn btn-primary " type="button">Start</button>                 
+                </span>
+              </div>
+            </div>  
+          </div>
+
+          <div class="dash-unit">
+            <dtitle>Saved Recordings</dtitle>
+            <hr>
+          </div>
+
+
    
       		</div><!-- /row -->
       	</div><!-- /container -->		
