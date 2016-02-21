@@ -137,21 +137,8 @@ function handleMessage(evt)
 						{															
 							$("#set_point_string").text(updateObject.set_point);								
 						}
-						if(updateKeys.indexOf('control_style') != -1)
-						{
-							if(updateObject.control_style == "Manual")
-							{
-								//$("#fan_label").text("Fan (Manual)");
-							}
-							else
-							{
-								//$("#fan_label").text("Fan (Auto)");
-							}							
-						}
-						if(updateKeys.indexOf('temp_unit') != -1) 
-						{
-							//setTempUnit(updateObject.temp_unit);
-						}
+						
+						
 						if(updateKeys.indexOf('cook_time') != -1) 
 						{
 							$("#cook_time_string").text(updateObject.cook_time);
@@ -174,7 +161,26 @@ function handleMessage(evt)
 						if(updateKeys.indexOf('set_point_value') != -1) 
 						{
 							$("#set_point_string").text(updateObject.set_point_value);
-						}							
+						}		
+						if(updateKeys.indexOf('fan_control') != -1) 
+						{
+							$('#on_button').css({'color': 'white'});
+							$('#auto_button').css({'color': 'white'});
+							$('#off_button').css({'color': 'white'});
+							
+							if(updateObject.fan_control=="on")
+							{
+								$('#on_button').css({'color': 'yellow'});								
+							}
+							else if(updateObject.fan_control=="off")
+							{
+								$('#off_button').css({'color': 'yellow'});
+							}	
+							else if(updateObject.fan_control=="auto")
+							{
+								$('#auto_button').css({'color': 'yellow'});								$("#fan_state_icon").css({'visibility': 'hidden'});
+							}							
+						}						
 						break;	
 									
 				}				

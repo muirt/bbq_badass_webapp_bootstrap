@@ -68,7 +68,7 @@ h5 {
 	background-image:url('../img/sep-half.png');
 	background-color: #3d3d3d;
 	color:white;
-	height:170px;
+	height:220px;
 }
 
 .dash-unit:hover {
@@ -162,14 +162,21 @@ h5 {
 	vertical-align:middle;
 }
 
+#fan_control_switch
+{
+  margin-left:10px;
+  margin-bottom: 10px;
+}
+
 #set_point_control
 {
 	margin-left:10px;
+  margin-bottom: 10px;
 }
 
-#fan_control_switch{
-	margin-top: 10px;
-	margin-right:10px;
+#fan_state_icon{
+	
+  margin-right:20px;
 	
 }
 
@@ -179,7 +186,7 @@ h5 {
 }
 
 .btn-setpoint {
-    padding: 10px 35px;
+    padding: 7px 35px;
     font-size: 22px;
 }
 
@@ -191,7 +198,7 @@ h5 {
 	background-image:url('../img/sep-half.png');
 	background-color: #3d3d3d;
 	color:white;
-	height:145px;
+	height:125px;
 }
 
 .tiny{
@@ -202,7 +209,6 @@ h5 {
 .menu_link{
 	margin-left:0px;
 }
-
 .half-unit:hover {
 	background-color: #4f4f4f;
 	-moz-box-shadow:    3px 3px 2px 0px #151515;
@@ -400,6 +406,13 @@ textarea {
 	margin-bottom: 10px;
 }
 
+#set_point_label{
+  font-size: 20px; 
+}
+
+#set_point_value{
+
+}
 
 
 .smoker_icon{

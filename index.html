@@ -111,23 +111,32 @@
         
 
       <!-- LOCAL TIME BLOCK -->
-      		<div class="dash-unit">
-	      		<dtitle>Set Point Temperature (F)/ Fan<span id="fan_state_icon" aria-hidden="true" class="li_vynil fs1 pull-right"></span></dtitle>
+      		<div class="half-unit">
+	      		<dtitle>Fan Control</dtitle>
+              <hr> 
+              <div class="cont">  
+              <div class="btn-group pull-left" id="fan_control_switch" role="group" aria-label="Basic example">
+                
+                <button type="button" class="btn btn-xlarge btn-info btn-secondary" id="auto_button">Auto</button>
+                <button type="button" class="btn btn-xlarge btn-success btn-secondary" id="on_button">On</button>
+                <button type="button" class="btn btn-xlarge btn-danger btn-secondary" id="off_button">Off</button>
+              </div>
+              <span id="fan_state_icon" aria-hidden="true" class="li_vynil fs2 pull-right"></span>
+              </div>
+              </div>
 
-            <!--<span aria-hidden="true" class="li_fire fs1 pull-right"></span>-->
-	      		<hr>	    
-            <div class="btn-group-vertical pull-left" id="set_point_control" role="group" aria-label="Basic example">
+          <div class="half-unit">
+            <dtitle>Set Point Temperature (F)</dtitle>
+            <hr>
+             <div class="cont"> 
+            <div class="btn-group pull-left" id="set_point_control" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-setpoint btn-primary btn-secondary " id="set_point_increase_button">+</button>
                 <button type="button" class="btn btn-setpoint btn-warning btn-secondary" id="set_point_decrease_button">-</button>
             </div>
+          </div>
             <div class="number_container" id="set_point_string">0</div>
 
-		      		<div class="btn-group pull-right" id="fan_control_switch" role="group" aria-label="Basic example">
-    					  
-                <button class="btn btn-xlarge btn-info btn-secondary" id="auto_button">Auto</button>
-    					  <button type="button" class="btn btn-xlarge btn-success btn-secondary" id="on_button">On</button>
-    					  <button type="button" class="btn btn-xlarge btn-danger btn-secondary" id="off_button">Off</button>
-              </div>
+		      		
 			</div>
 
     
