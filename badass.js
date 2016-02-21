@@ -1,9 +1,9 @@
 var socketaddyLocal= "ws://192.168.0.2:9001";
 
 
-var socketaddyInternet = "ws://beaglebone-todd.ddns.net:9001";
+var socketaddyInternet = "ws://bbqba.ddns.net:9001";
 var sock;			
-var lastOutputMode = $('#output_control_auto_manual_slider').attr("value");
+
 var debug_list = [];
 var autoVisible = true;
 var confirmedObjectList = []
@@ -14,8 +14,23 @@ function selectorize(name)
 	return name.toLowerCase().replace(' ', '_');
 }
 
+function toggleFullScreen() {
+  var doc = window.document;
+  var docEl = doc.documentElement;
+
+  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl);
+  }
+  else {
+    cancelFullScreen.call(doc);
+  }
+}
+
 function showMenu(menuName)
-{				
+{	/*			
 	menuName = '#' + menuName;
 	var slideout = $(menuName);
 	var slideoutWidth = $(menuName).width();
@@ -29,10 +44,12 @@ function showMenu(menuName)
 			left: -(slideoutWidth + 20)
 		}, slideoutWidth);	
 	}
+	*/
 }
 
 function fanLED(color)
 {
+	/*
 	var colorCode = "#FF0000";
 	var canvas = document.getElementById("output_state_graphic");
 	var context = canvas.getContext("2d");
@@ -43,30 +60,44 @@ function fanLED(color)
 	context.fillStyle = colorCode;
 	context.arc(50, 50, 50, 0, Math.PI * 2, false);
 	context.fill()
+	*/
 }
 
 function setTempUnit(unit)
 {
+	/*
 	$('#output_control_set_point_unit').text(unit);	
 	$('#current_temperatures_readouts_1_temperature_unit').text(unit);
 	$('#current_temperatures_readouts_2_temperature_unit').text(unit);
+	*/
 }
 
 function debug(message)
 {
-	debug_list.push(message)
+
+	var linewidth = 50;
+	
+	if(message.length > linewidth)
+	{		
+		debug_list.push(message.substring(0, linewidth))
+	}
+	
+	
 	var count = 0;
 	var debug_text = "";
 	debug_list.forEach(function(line){
-		debug_text += count + ':'+ line +  '\n';
+		debug_text = count + ':'+ line +  '\n';
 		count += 1;   
+
+		if(count >7)
+		{
+			return;
+		}
 	});
 	
-	if(count >7)
-	{
-		debug_list = debug_list.slice(count-7,count);
-	}
-	//$("#debug_string").text(debug_text);
+	
+	$("#debug_string").text(debug_text);
+	
 }
 
 function sendCommand(command)
@@ -84,7 +115,7 @@ function handleMessage(evt)
 		var keys = Object.keys(messageObject);
 		
 		displayConnected();
-		
+		//debug(messageString);
 		if(keys.indexOf('secret') != -1 && keys.indexOf('target') != -1 && keys.indexOf('value') !=-1)
 		{				
 			if(messageObject.secret == 'badass')
@@ -98,28 +129,28 @@ function handleMessage(evt)
 						{	
 							if(updateObject.input.length > 1)
 							{
-								$("#current_temperatures_readouts_1_temperature_value").text(updateObject.input[0].value);
-								$("#current_temperatures_readouts_2_temperature_value").text(updateObject.input[1].value);									
+								$("#meat_temperature_string").text(updateObject.input[0].value);
+								$("#grill_temperature_string").text(updateObject.input[1].value);									
 							}
 						}
 						if(updateKeys.indexOf('set_point') != -1) 
 						{															
-							$("#output_control_set_point_value").text(updateObject.set_point);								
+							$("#set_point_string").text(updateObject.set_point);								
 						}
 						if(updateKeys.indexOf('control_style') != -1)
 						{
 							if(updateObject.control_style == "Manual")
 							{
-								$("#fan_label").text("Fan (Manual)");
+								//$("#fan_label").text("Fan (Manual)");
 							}
 							else
 							{
-								$("#fan_label").text("Fan (Auto)");
+								//$("#fan_label").text("Fan (Auto)");
 							}							
 						}
 						if(updateKeys.indexOf('temp_unit') != -1) 
 						{
-							setTempUnit(updateObject.temp_unit);
+							//setTempUnit(updateObject.temp_unit);
 						}
 						if(updateKeys.indexOf('cook_time') != -1) 
 						{
@@ -129,11 +160,11 @@ function handleMessage(evt)
 						{
 							if(updateObject.output_state=="on")
 							{
-								fanLED("green");
+								$("#fan_state_icon").css({'visibility': 'visible'});
 							}
 							else if(updateObject.output_state=="off")
 							{
-								fanLED("red");
+								$("#fan_state_icon").css({'visibility': 'hidden'});
 							}								
 						}							
 						break;
@@ -142,12 +173,10 @@ function handleMessage(evt)
 						var updateKeys = Object.keys(updateObject);							
 						if(updateKeys.indexOf('set_point_value') != -1) 
 						{
-							$("#output_control_set_point_value").text(updateObject.set_point_value);
+							$("#set_point_string").text(updateObject.set_point_value);
 						}							
 						break;	
-					case "control_menu":							
-						$('#hysteresis_input').val(messageObject.value.hysteresis);
-						break;					
+									
 				}				
 			}
 		}
@@ -166,9 +195,13 @@ function displayConnected()
 	$("#connected_label").css({ 'color': 'lightgreen'});
 }
 
+$(window).on('beforeunload', function(){
+    sock.close();
+});
 
-$(document).ready(function(){		
-	$('#output_controls_auto').toggleClass("open");
+$(document).ready(function(){
+
+
 	
 	var localSock = new WebSocket(socketaddyLocal);
 	var internetSock = new WebSocket(socketaddyInternet);
@@ -208,77 +241,54 @@ $(document).ready(function(){
 		handleMessage(evt);
 	}; 
 
-	 $("#header_button").touchstart(function(){ 
-		event.preventDefault();
-		if($('#slideout_menu').hasClass("open") == false)
-		{		
-			showMenu('slideout_menu');						
-		}
-	});			
-
-	
-	
-	$('#slideout_menu .toggle').touchend(function(){
-		event.preventDefault();	
-		showMenu('slideout_menu');
-	});
-	
-	$('#set_point_decrease').touchstart(function(){
-		event.preventDefault();
+	$('#set_point_decrease_button').on('click', function(e){
+		
 		var command = new Object();
 		command.set_point="down";
 		sendCommand(command);
+		
 	});
 	
-	$('#set_point_increase').touchstart(function(){
-		event.preventDefault();
+	$('#set_point_increase_button').on('click', function(e){
+		
 		var command = new Object();
 		command.set_point="up";
 		sendCommand(command);	
 	});
 	
-	$('#fan_control_auto').touchstart(function(){
-		event.preventDefault();
+	$('#auto_button').on('click', function(e){	
 		var command = new Object();
 		command.output_mode="auto";
 		sendCommand(command);
+
+		$('#on_button').css({'color': 'white'});
+		$('#auto_button').css({'color': 'yellow'});
+		$('#off_button').css({'color': 'white'});
 	});
 	
-	$('#fan_control_on').touchstart(function(){
-		event.preventDefault();
+	$('#on_button').on('click', function(e){
+		
 		var command = new Object();
 		command.output_mode="on";
 		sendCommand(command);
+		$('#on_button').css({'color': 'yellow'});
+		$('#auto_button').css({'color': 'white'});
+		$('#off_button').css({'color': 'white'});
+		
 	});
 	
-	$('#fan_control_off').touchstart(function(){
-		event.preventDefault();
+	$('#off_button').on('click', function(e){
+		
 		var command = new Object();
 		command.output_mode="off";
 		sendCommand(command);
+		$('#on_button').css({'color': 'white'});
+		$('#auto_button').css({'color': 'white'});
+		$('#off_button').css({'color': 'yellow'});
+		
 	});
-	
-	$("#control-options").touchend(function(){	
-		event.preventDefault();				
-		var command = new Object();
-		command.menu_request="control";
-		sendCommand(command);			
-		showMenu('slideout_control_options');		
-	});					
-
-	$("#slideout_control_options .toggle").touchend(function(){
-		event.preventDefault();							
-		showMenu('slideout_control_options');			
-	});
-	
-	$('#hysteresis_input').bind('change', function(e) 
-	{
-		var command = new Object();
-		command.hysteresis_set= $(this).val();
-		sendCommand(command);	
-	}); 
-	
 });
+
  
 	
 
