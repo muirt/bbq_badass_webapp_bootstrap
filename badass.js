@@ -178,7 +178,7 @@ function handleMessage(evt)
 							}	
 							else if(updateObject.fan_control=="auto")
 							{
-								$('#auto_button').css({'color': 'yellow'});								$("#fan_state_icon").css({'visibility': 'hidden'});
+								$('#auto_button').css({'color': 'yellow'});	
 							}							
 						}						
 						break;	
@@ -201,9 +201,6 @@ function displayConnected()
 	$("#connected_label").css({ 'color': 'lightgreen'});
 }
 
-$(window).on('beforeunload', function(){
-    sock.close();
-});
 
 $(document).ready(function(){
 
