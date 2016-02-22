@@ -7,7 +7,22 @@ var sock;
 var debug_list = [];
 var autoVisible = true;
 var confirmedObjectList = []
-var confirmtedMenu;		
+var confirmtedMenu;	
+
+var set_point_temperature = 0;
+var meat_goal_temperature = 0; 
+
+var stored_command = null;
+var required_choice_to_send = 0;
+
+muted_color = "#999999";
+primary_color = "#428bca";
+warning_color = "#c09853";
+danger_color = "#b94a48";
+success_color = "#468847";
+
+
+info_color = "#3a87ad";	
 
 function selectorize(name)
 {	
@@ -105,6 +120,81 @@ function sendCommand(command)
 	sock.send(JSON.stringify(command));
 }
 
+function calculate_progress(part, whole)
+{	
+	//alert(part + " " + whole);
+	var result = 0;
+
+	if(whole != 0){
+		result = part/whole;
+	}
+
+
+	return ("" + parseInt(result * 100) + "%");
+
+
+}
+
+function evaluate_progress()
+{
+	var meat_temp = parseInt($("#meat_temperature_string").text());
+	var grill_temp = parseInt($("#grill_temperature_string").text());
+
+	meat_width = calculate_progress(meat_temp, meat_goal_temperature);
+	grill_width = calculate_progress(grill_temp, set_point_temperature);
+
+
+	
+	$('#meat_temp_progress').css({'width':meat_width});
+	$('#grill_temp_progress').css({'width':grill_width});
+
+	if(parseInt(meat_width) < 40)
+	{
+		$('#meat_temp_progress').css({'background':primary_color});
+	}
+
+	if(parseInt(meat_width) >=40 && parseInt(meat_width) < 90 )
+	{
+		$('#meat_temp_progress').css({'background':info_color});
+	}
+
+	if(parseInt(meat_width) >= 90 && parseInt(meat_width) < 100 )
+	{
+		$('#meat_temp_progress').css({'background':warning_color});
+	}
+
+
+	if(parseInt(meat_width) >=100 && parseInt(meat_width) < 105 )
+	{
+
+		$('#meat_temp_progress').css({'background':success_color});
+	}
+	if(parseInt(meat_width) >= 105 )
+	{
+
+		$('#meat_temp_progress').css({'background':danger_color});
+	}
+
+	if(parseInt(grill_width) < 90)
+	{					
+		
+		$('#grill_temp_progress').css({'background': primary_color});
+
+	}
+	if(parseInt(grill_width) >90 && parseInt(grill_width) < 110 )
+	{					
+		
+		$('#grill_temp_progress').css({'background': success_color});
+
+	}
+	if(parseInt(grill_width) >= 110)
+	{		
+		//alert(">110");							
+		$('#grill_temp_progress').css({'background': danger_color});
+
+	}
+}
+
 function handleMessage(evt)
 {
 	var messageString = evt.data;			
@@ -115,6 +205,9 @@ function handleMessage(evt)
 		var keys = Object.keys(messageObject);
 		
 		displayConnected();
+		set_point_temperature = parseInt($("#set_point_string").text());
+		meat_goal_temperature = parseInt($("#goal_meat_input").val());
+		evaluate_progress();
 		//debug(messageString);
 		if(keys.indexOf('secret') != -1 && keys.indexOf('target') != -1 && keys.indexOf('value') !=-1)
 		{				
@@ -131,11 +224,15 @@ function handleMessage(evt)
 							{
 								$("#meat_temperature_string").text(updateObject.input[0].value);
 								$("#grill_temperature_string").text(updateObject.input[1].value);									
+
+								
 							}
 						}
+					
+						
 						if(updateKeys.indexOf('set_point') != -1) 
 						{															
-							$("#set_point_string").text(updateObject.set_point);								
+							$("#set_point_string").text(updateObject.set_point);														
 						}
 						
 						
@@ -143,6 +240,7 @@ function handleMessage(evt)
 						{
 							$("#cook_time_string").text(updateObject.cook_time);
 						}
+
 						if(updateKeys.indexOf('output_state') != -1) 
 						{
 							if(updateObject.output_state=="on")
@@ -153,15 +251,46 @@ function handleMessage(evt)
 							{
 								$("#fan_state_icon").css({'visibility': 'hidden'});
 							}								
-						}							
+						}
 						break;
+
+					case "response":
+
+						var updateObject = messageObject.value;
+						var updateKeys = Object.keys(updateObject);		
+											
+						if(updateKeys.indexOf('hysteresis') != -1) 
+						{
+							$("#hysteresis_input").val(updateObject.hysteresis);
+
+						}
+						if(updateKeys.indexOf('set_point') != -1) 
+						{															
+							$("#set_point_string").text(updateObject.set_point);														
+						}
+
+						break;
+
 					case "initial_update":						
 						var updateObject = messageObject.value;
 						var updateKeys = Object.keys(updateObject);							
 						if(updateKeys.indexOf('set_point_value') != -1) 
 						{
 							$("#set_point_string").text(updateObject.set_point_value);
+							set_point_temperature = parseInt($("#set_point_string").text());
+							
 						}		
+
+						if(updateKeys.indexOf('hysteresis') != -1)
+						{
+							$("#hysteresis_input").val(updateObject.hysteresis);
+						}
+						
+						if(updateKeys.indexOf('meat_temperature_goal') != -1)
+						{
+							$("#goal_meat_input").val(updateObject.meat_temperature_goal);
+							meat_goal_temperature = parseInt($("#goal_meat_input").val());
+						}
 						if(updateKeys.indexOf('fan_control') != -1) 
 						{
 							$('#on_button').css({'color': 'white'});
@@ -182,7 +311,7 @@ function handleMessage(evt)
 							}							
 						}						
 						break;	
-									
+					
 				}				
 			}
 		}
@@ -205,6 +334,28 @@ function displayConnected()
 {
 	$("#connected_label").text("Connected");
 	$("#connected_label").css({ 'color': 'lightgreen'});
+}
+
+function configure_modal(title, body, button1, button2)
+{
+	$('#modal_title').text(title);
+	$('#modal_body').text(body);
+	$('#modal_button_1').text(button1);
+	$('#modal_button_2').text(button2);
+}
+
+function start_message(command, required_choice){
+	stored_command = command;
+	required_choice_to_send = required_choice;
+}
+
+function complete_message(choice){
+	if(choice == required_choice_to_send){
+		sendCommand(stored_command);
+		stored_command = null;
+		required_choice_to_send = 0;
+	
+	}
 }
 
 
@@ -271,6 +422,8 @@ $(document).ready(function(){
 		var command = new Object();
 		command.set_point="up";
 		sendCommand(command);	
+
+
 	});
 	
 	$('#auto_button').on('click', function(e){	
@@ -308,6 +461,93 @@ $(document).ready(function(){
 	$('#fullscreen_button').on('click', function (e) {
 		toggleFullScreen();
 	})
+
+
+	$('#hystersis_plus_button').on('click', function(e){
+		var command = new Object();
+		command.hysteresis_change="up";
+		sendCommand(command);
+		
+	});
+
+	$('#hystersis_minus_button').on('click', function(e){
+		var command = new Object();
+		command.hysteresis_change="down";
+		sendCommand(command);
+		
+	});
+
+
+	$('#goal_meat_save_button').on('click', function(e){
+		var command = new Object();
+		command.meat_temperature_goal=$('#goal_meat_input').val();
+		sendCommand(command);
+	});
+
+	$('#current_recording_details_button').on('click', function(e){
+		var command = new Object();
+		command.current_recording="details"
+		sendCommand(command);
+	});
+
+	$('#current_recording_stop_button').on('click', function(e){
+		var command = new Object();
+		command.current_recording="stop"
+		start_message(command, 1);
+		configure_modal('Confirm', 'Stop current recording?', 'OK', 'Cancel');
+		$('#generic_modal').modal('toggle')
+	});
+
+	$('#current_recording_graph_button').on('click', function(e){
+		var command = new Object();
+		command.current_recording="graph"
+		sendCommand(command);
+	});
+	
+	$('#new_recording_button').on('click', function(e){
+		var command = new Object();
+		command.start_new_recording=$('#new_recording_input').val();
+		start_message(command, 1);
+		configure_modal('Confirm', 'Start an new recording?', 'OK', 'Cancel');
+		$('#generic_modal').modal('toggle')
+
+	});
+	
+	
+	$('#generic_modal .modal-footer button').on('click', function (e) {
+    	var $target = $(e.target);
+    	$(this).closest('.modal').on('hidden.bs.modal', function (e) {
+        	if($target[0].id == "modal_button_1"){
+        		complete_message(1);
+        	}
+        	if($target[0].id == "modal_button_2"){
+        		complete_message(2);
+        	}
+    	});
+	});
+
+	function degrees_radio_handler(){
+		var command = new Object();
+		command.units = $('input:radio[name=unit]:checked').val();
+		sendCommand(command);
+		
+	}
+
+	$('#F').on('click', degrees_radio_handler);
+	$('#C').on('click', degrees_radio_handler);
+
+	function debug_radio_handler(){
+		var command = new Object();
+		command.debug = $('input:radio[name=view]:checked').val();
+		sendCommand(command);
+		
+	}
+
+	$('#on').on('click', debug_radio_handler);
+	$('#off').on('click', debug_radio_handler);
+
+
+
 });
 
  
