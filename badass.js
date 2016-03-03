@@ -15,6 +15,7 @@ var meat_goal_temperature = 0;
 var stored_command = null;
 var required_choice_to_send = 0;
 
+var saved_log_count = 0;
 muted_color = "#999999";
 primary_color = "#428bca";
 warning_color = "#c09853";
@@ -197,10 +198,13 @@ function evaluate_progress()
 
 function handleMessage(evt)
 {
-	var messageString = evt.data;			
-	if(messageString.indexOf('{') == 0)
-	{			
-		var noSingleQuotes = messageString.replace(/'/g, '"');				
+
+	var reader = new FileReader();
+    reader.onload = function(event){    	
+	    messageString = reader.result;
+
+		var noSingleQuotes = messageString.replace(/'/g, '"');		
+			
 		var messageObject = JSON.parse(noSingleQuotes);
 		var keys = Object.keys(messageObject);
 		
@@ -210,18 +214,23 @@ function handleMessage(evt)
 		evaluate_progress();
 		//debug(messageString);
 		if(keys.indexOf('secret') != -1 && keys.indexOf('target') != -1 && keys.indexOf('value') !=-1)
-		{				
+		{			
+
 			if(messageObject.secret == 'badass')
-			{					
+			{		
+
 				switch(messageObject.target)
 				{			
-					case "periodic_update":							
+					case "periodic_update":	
+
 						var updateObject = messageObject.value;
 						var updateKeys = Object.keys(updateObject);						
 						if(updateKeys.indexOf('input') != -1) 
 						{	
+
 							if(updateObject.input.length > 1)
 							{
+									
 								$("#meat_temperature_string").text(updateObject.input[0].value);
 								$("#grill_temperature_string").text(updateObject.input[1].value);									
 
@@ -270,10 +279,32 @@ function handleMessage(evt)
 						}
 
 						break;
+					case "recording":						
+						var updateObject = messageObject.value;
+						var updateKeys = Object.keys(updateObject);
+						if(updateKeys.indexOf('details') != -1)
+						{						
 
+							$('#current_recording_name').text(updateObject.details.name);
+							$('#current_recording_duration').text(updateObject.details.time);
+
+						}
+
+					case "saved_logs":
+						var updateObject = messageObject.value;
+						var ul = document.getElementById('saved_recordings_list');
+						ul.innerHTML = '';
+						updateObject.forEach(function(recording){
+							
+							var li = document.createElement("li");
+							li.appendChild(document.createTextNode(recording.name));
+		
+							ul.appendChild(li);
+						});
 					case "initial_update":						
 						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);							
+						var updateKeys = Object.keys(updateObject);	
+
 						if(updateKeys.indexOf('set_point_value') != -1) 
 						{
 							$("#set_point_string").text(updateObject.set_point_value);
@@ -287,7 +318,7 @@ function handleMessage(evt)
 						}
 						
 						if(updateKeys.indexOf('meat_temperature_goal') != -1)
-						{
+						{							
 							$("#goal_meat_input").val(updateObject.meat_temperature_goal);
 							meat_goal_temperature = parseInt($("#goal_meat_input").val());
 						}
@@ -310,12 +341,28 @@ function handleMessage(evt)
 								$('#auto_button').css({'color': 'yellow'});	
 							}							
 						}						
-						break;	
+						if(updateKeys.indexOf('temperature_units') != -1){
+							//alert(updateObject.temperature_units);
+							if(updateObject.temperature_units == "C" ){
+								document.getElementById("C").checked = true;
+							}
+							else if(updateObject.temperature_units == "F" ){
+								document.getElementById("C").checked = false;
+							}
+							
+							
+						}
+						break;
+
 					
 				}				
 			}
 		}
-	}
+		
+
+
+	};
+  	reader.readAsText(evt.data);
 } 
 
 function displayError()
@@ -484,29 +531,118 @@ $(document).ready(function(){
 		sendCommand(command);
 	});
 
-	$('#current_recording_details_button').on('click', function(e){
-		var command = new Object();
-		command.current_recording="details"
-		sendCommand(command);
-	});
 
 	$('#current_recording_stop_button').on('click', function(e){
 		var command = new Object();
-		command.current_recording="stop"
+		//command.finish_current_log="finish_current_log";
+		command.menu_request = "list_saved_logs";
 		start_message(command, 1);
 		configure_modal('Confirm', 'Stop current recording?', 'OK', 'Cancel');
 		$('#generic_modal').modal('toggle')
 	});
 
+
+	/*
+
+var updateObject = messageObject.value;
+						var ul = document.getElementById('saved_recordings_list');
+						ul.innerHTML = '';
+						updateObject.forEach(function(recording){
+							
+							var li = document.createElement("li");
+							li.appendChild(document.createTextNode(recording.name));
+		
+							ul.appendChild(li);
+						});
+var li = document.createElement("li");
+							li.appendChild(document.createTextNode(recording.name));
+		
+							ul.appendChild(li);
+*/
 	$('#current_recording_graph_button').on('click', function(e){
-		var command = new Object();
-		command.current_recording="graph"
-		sendCommand(command);
+		// var command = new Object();
+		// command.menu_request = "list_saved_logs";
+		// //command.show_current_log="show_current_log";
+		// //sendCommand(command);
+		 var ul = document.getElementById('saved_recordings_list');
+		// ul.innerHTML = '';
+		// var btn = document.createElement("button");
+		// btn.class = "btn btn-success";
+		// btn.value = "Brisket";
+		var li = document.createElement("li");
+		li.style.marginBottom = '10px';
+		/*li.innerHTML ="<div class=\"accordion\" id=\"accordion2\"> \
+                    <div class=\"accordion-group\"> \
+                        <div class=\"accordion-heading\"> \
+                            <a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#collapseTwo\"> \
+                            Brisket 1 \
+                            </a> \
+                         </div> \
+                         <div id=\"collapseTwo\" class=\"accordion-body collapse\"> \
+                             <div class=\"accordion-inner\"> \
+                <button id=\"hystersis_plus_button2\" class=\"btn btn-danger\" type=\"button\">+</button> \
+                 </div> \
+                    </div> \
+                     </div> </div> ";
+		*/
+		li.innerHTML = "<div style=\"width: 100%; margin-bottom:10px;\"><button  id=\"saved_recording_button" + saved_log_count + "\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#recording_template" + saved_log_count + "\" data-toggle=\"collapse\">Pork Butt</button></div> \
+		<div class=\"cont collapse\" id=\"recording_template" + saved_log_count + "\"> \
+		     <h2> <span class=\"label label-success pull-left\">Name</span><div >Not</div></h2>  \
+		          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >Recording</h2> \
+		           <div class=\"btn-group pull-right\" id=\"current_recording_control\" role=\"group\" aria-label=\"Basic example\">\
+		           <button type=\"button\" class=\"btn btn-primary btn-secondary \" >Stop</button>\
+        <button type=\"button\" class=\"btn btn-warning btn-secondary \" >\
+        Graph</button> \
+    </div>\
+  </div>";
+		ul.appendChild(li);
+
+		var template = document.getElementById("recording_template" + saved_log_count);
+		template.style.marginBottom = '10px';
+		var button = document.getElementById("saved_recording_button" + saved_log_count);
+		saved_log_count += 1;
+		button.addEventListener("click", saved_recording_expand);
+
+		var height = 0;
+		height = parseInt($('#saved_recordings_div').css('height'));
+		var offset = 50;
+
+		$('#saved_recordings_div').css({'height': height + offset});	
+
+
 	});
+
+	function saved_recording_expand(e){
+		var height = 0;
+		
+		height = parseInt($('#saved_recordings_div').css('height'));
+		var offset = -160;
+		if($($(this).data("target")).hasClass("collapse"))
+		{			
+			offset *= -1;
+		}
+	
+		$('#saved_recordings_div').css({'height': height + offset});	
+/*
+		if($('this').data('state') == "closed")
+		{
+			height = $('#saved_recordings_div').css('height');
+			$('#saved_recordings_div').css('height') = height + 30;
+			$('this').data('state') == "open";
+		}
+		else
+		{
+			height = $('#saved_recordings_div').css('height');
+			$('#saved_recordings_div').css({'height': height - 30});
+			$('this').data('state') == "closed"
+		}
+*/		
+	}
+		
 	
 	$('#new_recording_button').on('click', function(e){
 		var command = new Object();
-		command.start_new_recording=$('#new_recording_input').val();
+		command.create_new_log=$('#new_recording_input').val();
 		start_message(command, 1);
 		configure_modal('Confirm', 'Start an new recording?', 'OK', 'Cancel');
 		$('#generic_modal').modal('toggle')
@@ -546,7 +682,10 @@ $(document).ready(function(){
 	$('#on').on('click', debug_radio_handler);
 	$('#off').on('click', debug_radio_handler);
 
-
+	$('#first_button').on('click', function (e) {
+    	var initial_height = $('#saved_recordings_div').css('height');
+    	$('#saved_recordings_div').css({'height':(parseInt(initial_height) + 30)});
+	});
 
 });
 

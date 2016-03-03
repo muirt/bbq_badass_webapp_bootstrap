@@ -79,7 +79,7 @@
 	      		<dtitle>Meat Temperature (F)</dtitle>
 	      		<hr>
 	      			<!--span aria-hidden="true" class="li_food smoker_icon fs2 pull-left"></span-->
-            <div class="progress pull-left" style="width:70%; margin-left:10px; background:transparent">
+            <div class="progress pull-left" style="width:55%; margin-left:10px; background:transparent">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
               aria-valuemin="0" aria-valuemax="100" id="meat_temp_progress" style="width:0%">            
               </div>
@@ -92,7 +92,7 @@
      	 <div class="half-unit">
 	      		<dtitle>Grill Temperature (F)</dtitle>
 	      		<hr>
-	      			<div class="progress pull-left" style="width:70%; margin-left:10px; background:transparent">
+	      			<div class="progress pull-left" style="width:55%; margin-left:10px; background:transparent">
               <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
               aria-valuemin="0" aria-valuemax="100" id="grill_temp_progress" style="width:0%">            
               </div>
@@ -186,17 +186,11 @@
           <div class="half-unit medium">
             <dtitle>Temperature Units </dtitle>
             <hr>    
-         <!--    <div class="switch pull-right unit_switch" id="unit_control">
-              <input type="radio" class="switch-input unit_switch" name="unit" value="C" id="c_radio" >
-              <label for="c" class="switch-label switch-label-off unit_switch" >C</label>
-              <input type="radio" class="switch-input unit_switch" name="unit" value="F" id="f_radio" checked="">
-              <label for="f" class="switch-label switch-label-on unit_switch">F</label>
-              <span class="switch-selection"></span>
-            </div>   --> 
             <div class="switch pull-right" id="unit_control">
-              <input type="radio" class="switch-input" name="unit" value="C" id="C"  >
+              
+              <input type="radio" class="switch-input" name="unit" value="C" id="C" >
               <label for="C" class="switch-label switch-label-off">C</label>
-              <input type="radio" class="switch-input" name="unit" value="F" id="F" checked="">
+              <input type="radio" checked="" class="switch-input" name="unit" value="F" id="F">
               <label for="F" class="switch-label switch-label-on">F</label>
               <span class="switch-selection"></span>
             </div>        
@@ -214,12 +208,14 @@
               <span class="switch-selection"></span>
             </div>        
           </div>   
-          <div class="half-unit">
+          <div class="dash-unit">
             <dtitle>Current Recording</dtitle>
             <hr>
-            <div class="cont"> 
+            <div class="cont">               
+             <h2 > <span class="label label-success pull-left">Name</span><div id="current_recording_name">Not</div></h2>
+             <h2 ><span class="label label-warning pull-left"> Duration</span><div id="current_recording_duration">Recording</h2>
+
               <div class="btn-group pull-right" id="current_recording_control" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success btn-secondary " id="current_recording_details_button">Details</button>
                 <button type="button" class="btn btn-primary btn-secondary " id="current_recording_stop_button">Stop</button>
                 <button type="button" class="btn btn-warning btn-secondary " id="current_recording_graph_button">
                 Graph</button>
@@ -240,9 +236,20 @@
             </div>  
           </div>
 
-          <div class="dash-unit">
+          <div class="dash-unit" id="saved_recordings_div">
             <dtitle>Saved Recordings</dtitle>
             <hr>
+            <ul id="saved_recordings_list">
+                <!-- <li>
+                  <div style="width: 100%; margin-bottom:10px;"><button id="first_button" class="btn btn-xlarge btn-success" data-target="#btn2" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-danger collapse" id="btn2" data-target="#btn3" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-info collapse" id="btn3" data-target="#btn4" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-warning collapse" id="btn4" data-target="#btn5" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;%"><button class="btn btn-xlarge btn-primary collapse" id="btn5" data-target="#btn6" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-danger collapse" id="btn6" data-target="#btn7" data-toggle="collapse">Collapse</button></div>
+                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-success collapse" id="btn7" data-target="#btn8" data-toggle="collapse">Collapse</button></div>
+                </li> -->
+               </ul>
             
          </div>
 
