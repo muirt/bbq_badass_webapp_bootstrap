@@ -164,6 +164,16 @@ h5 {
 	vertical-align:middle;
 }
 
+.graphing{
+  height:380px;
+}
+
+.chart{
+  height:300px;
+  width:95%;
+  margin-left:2.5%;
+}
+
 #hystersis_plus_button{
   //margin-top:0.5px;
   height:51px;

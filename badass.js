@@ -1,4 +1,4 @@
-var socketaddyLocal= "ws://192.168.4.1:9001";
+var socketaddyLocal= "ws://192.168.0.12:9001";
 
 
 var socketaddyInternet = "ws://bbqba.ddns.net:9001";
@@ -24,6 +24,155 @@ success_color = "#468847";
 
 
 info_color = "#3a87ad";	
+
+
+
+function graph(data)
+{
+	var meatData = [];
+	var grillData = [];	
+	for (var j = 1; j < data.length; j++) {
+		var val_meat = parseInt(data[j][0]);
+		var val_grill = parseInt(data[j][1]);
+		var time = new Date(data[j][2]).getTime();
+
+		var dataPoint1 = [
+		  time,	 
+		  val_meat
+		];
+
+		var dataPoint2 = [
+		  time,	 
+		  val_grill
+		];
+
+		meatData.push(dataPoint1);
+		grillData.push(dataPoint2);
+	}
+
+	var chart = $(".chart").highcharts({
+		chart: {
+		  zoomType: 'x',
+		  type: 'line'
+		},
+		title: {
+		  text: ''
+		},
+		xAxis: {
+		  type: 'datetime'
+		},
+		yAxis: {
+		  title: {
+		    text: 'TEMPERATURE'
+		  }
+		},
+		legend: {
+		  enabled: true
+		},
+		series: [{
+		  name: 'MEAT',
+		  data: meatData
+		},
+		{
+		  name: 'GRILL',
+		  data: grillData
+		}]
+	});
+}
+	Highcharts.theme = {
+   colors: ["#2b908f", "#90ee7e", "#f45b5b", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+      "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+   chart: {
+      backgroundColor: {
+         linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+         stops: [
+            [0, '#2a2a2b'],
+            [1, '#3e3e40']
+         ]
+      },
+      style: {
+         
+      },
+      plotBorderColor: '#606063'
+   },
+   title: {
+      style: {
+         color: '#E0E0E3',
+         textTransform: 'uppercase',
+         fontSize: '20px'
+      }
+   },
+   subtitle: {
+      style: {
+         color: '#E0E0E3',
+         textTransform: 'uppercase'
+      }
+   },
+   xAxis: {
+      gridLineColor: '#707073',
+      labels: {
+         style: {
+            color: '#E0E0E3'
+         }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      title: {
+         style: {
+            color: '#A0A0A3'
+
+         }
+      }
+   },
+   yAxis: {
+      gridLineColor: '#707073',
+      labels: {
+         style: {
+            color: '#E0E0E3'
+         }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      tickWidth: 1,
+      title: {
+         style: {
+            color: '#A0A0A3'
+         }
+      }
+   },
+   tooltip: {
+      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      style: {
+         color: '#F0F0F0'
+      }
+   },
+
+   legend: {
+      itemStyle: {
+         color: '#E0E0E3'
+      },
+      itemHoverStyle: {
+         color: '#FFF'
+      },
+      itemHiddenStyle: {
+         color: '#606063'
+      }
+   },
+
+
+   // special colors for some of the
+   legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+   background2: '#505053',
+   dataLabelsColor: '#B0B0B3',
+   textColor: '#C0C0C0',
+   contrastTextColor: '#F0F0F3',
+   maskColor: 'rgba(255,255,255,0.3)'
+};
+	// Apply the theme
+Highcharts.setOptions(Highcharts.theme);
+
 
 function selectorize(name)
 {	
@@ -204,7 +353,8 @@ function handleMessage(evt)
 	    messageString = reader.result;
 
 		var noSingleQuotes = messageString.replace(/'/g, '"');		
-			
+		
+		
 		var messageObject = JSON.parse(noSingleQuotes);
 		var keys = Object.keys(messageObject);
 		
@@ -283,13 +433,19 @@ function handleMessage(evt)
 						var updateObject = messageObject.value;
 						var updateKeys = Object.keys(updateObject);
 						if(updateKeys.indexOf('details') != -1)
-						{						
-
+						{		
 							$('#current_recording_name').text(updateObject.details.name);
 							$('#current_recording_duration').text(updateObject.details.time);
-
 						}
-
+						break;
+					case "graphing":
+						var updateObject = messageObject.value;
+						var updateKeys = Object.keys(updateObject);
+						if(updateKeys.indexOf('graph_data') != -1)
+						{							
+							graph(updateObject.graph_data.graphData);
+						}
+						break;
 					case "saved_logs":
 						var updateObject = messageObject.value;
 						var ul = document.getElementById('saved_recordings_list');
@@ -564,14 +720,14 @@ var li = document.createElement("li");
 		// command.menu_request = "list_saved_logs";
 		// //command.show_current_log="show_current_log";
 		// //sendCommand(command);
-		 var ul = document.getElementById('saved_recordings_list');
+		// var ul = document.getElementById('saved_recordings_list');
 		// ul.innerHTML = '';
 		// var btn = document.createElement("button");
 		// btn.class = "btn btn-success";
 		// btn.value = "Brisket";
-		var li = document.createElement("li");
+		/*lvar li = document.createElement("li");
 		li.style.marginBottom = '10px';
-		/*li.innerHTML ="<div class=\"accordion\" id=\"accordion2\"> \
+		i.innerHTML ="<div class=\"accordion\" id=\"accordion2\"> \
                     <div class=\"accordion-group\"> \
                         <div class=\"accordion-heading\"> \
                             <a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#collapseTwo\"> \
@@ -584,7 +740,7 @@ var li = document.createElement("li");
                  </div> \
                     </div> \
                      </div> </div> ";
-		*/
+		
 		li.innerHTML = "<div style=\"width: 100%; margin-bottom:10px;\"><button  id=\"saved_recording_button" + saved_log_count + "\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#recording_template" + saved_log_count + "\" data-toggle=\"collapse\">Pork Butt</button></div> \
 		<div class=\"cont collapse\" id=\"recording_template" + saved_log_count + "\"> \
 		     <h2> <span class=\"label label-success pull-left\">Name</span><div >Not</div></h2>  \
@@ -608,7 +764,10 @@ var li = document.createElement("li");
 		var offset = 50;
 
 		$('#saved_recordings_div').css({'height': height + offset});	
-
+		*/
+		var command = new Object();
+		command.graph_log = "fake.csv";
+		sendCommand(command);
 
 	});
 
