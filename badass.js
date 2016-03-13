@@ -1,4 +1,4 @@
-var socketaddyLocal= "ws://192.168.0.12:9001";
+var socketaddyLocal= "ws://192.168.0.2:9001";
 
 
 var socketaddyInternet = "ws://bbqba.ddns.net:9001";
@@ -31,6 +31,16 @@ function graph(data)
 {
 	var meatData = [];
 	var grillData = [];	
+
+	var height = 0;
+	height = parseInt($('.graphing').css('height'));
+
+	if (height < 300)
+	{
+		var full_size = 380;
+		$('.graphing').css({'height': full_size});
+	}
+
 	for (var j = 1; j < data.length; j++) {
 		var val_meat = parseInt(data[j][0]);
 		var val_grill = parseInt(data[j][1]);
@@ -174,6 +184,83 @@ function graph(data)
 Highcharts.setOptions(Highcharts.theme);
 
 
+function saved_recording_expand(e){
+	var height = 0;
+	
+	height = parseInt($('#saved_recordings_div').css('height'));
+	var offset = -160;
+	if($($(this).data("target")).hasClass("collapse"))
+	{			
+		offset *= -1;
+	}
+
+	$('#saved_recordings_div').css({'height': height + offset});	
+
+}
+
+function saved_recording_graph(e){
+	var name = $(e.target).attr("id");
+	var root = name.split("_graph_button")[0];
+	var command = new Object();
+	command.graph_log = root + ".csv";
+	sendCommand(command);
+
+}
+
+function saved_recording_delete(e){
+	var name = $(e.target).attr("id");
+	var root = name.split("_delete_button")[0];
+	var command = new Object();
+	command.delete_log = root + ".csv";
+	start_message(command, 1);
+	configure_modal('Confirm', 'Delete this recording?', 'OK', 'Cancel');
+	$('#generic_modal').modal('toggle')
+}		
+		
+
+function create_recording_button(name, duration)
+{			
+	alert(name);
+	var ul = document.getElementById('saved_recordings_list');
+	var li = document.createElement("li");
+	//li.style.marginTop = '40px';
+	li.style.marginBottom = '10px';
+	
+	li.innerHTML = "<div style=\"width: 100%; margin-bottom:0px;\"><button  id=\"" + name + "_button\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#" + name + "_recording_template\" data-toggle=\"collapse\">" + name + "</button></div> \
+	<div class=\"cont collapse\" style=\"margin-bottom:0px\" id=\"" + name + "_recording_template\"> \
+	     <h2> <span class=\"label label-success pull-left\">Name</span><div >" + name + "</div></h2>  \
+	          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >" + duration + "</h2> \
+	           <div class=\"btn-group pull-right\" id=\"current_recording_control\" role=\"group\" aria-label=\"Basic example\">\
+	           <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Delete</button>\
+    		   <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-warning btn-secondary \" >Graph</button> \
+	<div style=\"width:100%; height:10px;\"></div> \	
+	</div>\
+		</div>";
+
+	ul.appendChild(li);
+
+	var template = document.getElementById(name + "_recording_template");
+	template.style.marginBottom = '10px';
+	
+	var log_button = document.getElementById(name + "_button");
+	log_button.addEventListener("click", saved_recording_expand);
+
+	var graph_button = document.getElementById(name + "_graph_button");
+	graph_button.addEventListener("click", saved_recording_graph);
+
+	var delete_button = document.getElementById(name + "_delete_button");
+	delete_button.addEventListener("click", saved_recording_delete);
+
+	saved_log_count += 1;
+	
+
+	var height = 0;
+	height = parseInt($('#saved_recordings_div').css('height'));
+	var offset = 60;
+
+	$('#saved_recordings_div').css({'height': height + offset});	
+}	
+
 function selectorize(name)
 {	
 	return name.toLowerCase().replace(' ', '_');
@@ -194,76 +281,6 @@ function toggleFullScreen() {
   }
 }
 
-function showMenu(menuName)
-{	/*			
-	menuName = '#' + menuName;
-	var slideout = $(menuName);
-	var slideoutWidth = $(menuName).width();
-	slideout.toggleClass("open");			
-	if (slideout.hasClass("open")) {
-		slideout.animate({
-			left: "0px"
-		});	
-	} else {
-		slideout.animate({
-			left: -(slideoutWidth + 20)
-		}, slideoutWidth);	
-	}
-	*/
-}
-
-function fanLED(color)
-{
-	/*
-	var colorCode = "#FF0000";
-	var canvas = document.getElementById("output_state_graphic");
-	var context = canvas.getContext("2d");
-	if(color == "green")
-	{
-		colorCode = "#00FF00"
-	}	
-	context.fillStyle = colorCode;
-	context.arc(50, 50, 50, 0, Math.PI * 2, false);
-	context.fill()
-	*/
-}
-
-function setTempUnit(unit)
-{
-	/*
-	$('#output_control_set_point_unit').text(unit);	
-	$('#current_temperatures_readouts_1_temperature_unit').text(unit);
-	$('#current_temperatures_readouts_2_temperature_unit').text(unit);
-	*/
-}
-
-function debug(message)
-{
-
-	var linewidth = 50;
-	
-	if(message.length > linewidth)
-	{		
-		debug_list.push(message.substring(0, linewidth))
-	}
-	
-	
-	var count = 0;
-	var debug_text = "";
-	debug_list.forEach(function(line){
-		debug_text = count + ':'+ line +  '\n';
-		count += 1;   
-
-		if(count >7)
-		{
-			return;
-		}
-	});
-	
-	
-	$("#debug_string").text(debug_text);
-	
-}
 
 function sendCommand(command)
 {
@@ -377,14 +394,10 @@ function handleMessage(evt)
 						var updateKeys = Object.keys(updateObject);						
 						if(updateKeys.indexOf('input') != -1) 
 						{	
-
 							if(updateObject.input.length > 1)
-							{
-									
+							{									
 								$("#meat_temperature_string").text(updateObject.input[0].value);
 								$("#grill_temperature_string").text(updateObject.input[1].value);									
-
-								
 							}
 						}
 					
@@ -447,16 +460,15 @@ function handleMessage(evt)
 						}
 						break;
 					case "saved_logs":
-						var updateObject = messageObject.value;
-						var ul = document.getElementById('saved_recordings_list');
-						ul.innerHTML = '';
-						updateObject.forEach(function(recording){
+						var updateObject = messageObject.value;		
+						if(!$("ul").has("li").length){
 							
-							var li = document.createElement("li");
-							li.appendChild(document.createTextNode(recording.name));
-		
-							ul.appendChild(li);
-						});
+							updateObject.logs.forEach(function(recording){
+
+								create_recording_button(recording.name, recording.duration)						
+							});
+						}		
+						break;
 					case "initial_update":						
 						var updateObject = messageObject.value;
 						var updateKeys = Object.keys(updateObject);	
@@ -508,9 +520,7 @@ function handleMessage(evt)
 							
 							
 						}
-						break;
-
-					
+						break;					
 				}				
 			}
 		}
@@ -563,8 +573,6 @@ function complete_message(choice){
 
 
 $(document).ready(function(){
-
-
 	
 	var localSock = new WebSocket(socketaddyLocal);
 	var internetSock = new WebSocket(socketaddyInternet);
@@ -625,8 +633,6 @@ $(document).ready(function(){
 		var command = new Object();
 		command.set_point="up";
 		sendCommand(command);	
-
-
 	});
 	
 	$('#auto_button').on('click', function(e){	
@@ -697,107 +703,17 @@ $(document).ready(function(){
 		$('#generic_modal').modal('toggle')
 	});
 
+	
 
-	/*
-
-var updateObject = messageObject.value;
-						var ul = document.getElementById('saved_recordings_list');
-						ul.innerHTML = '';
-						updateObject.forEach(function(recording){
-							
-							var li = document.createElement("li");
-							li.appendChild(document.createTextNode(recording.name));
-		
-							ul.appendChild(li);
-						});
-var li = document.createElement("li");
-							li.appendChild(document.createTextNode(recording.name));
-		
-							ul.appendChild(li);
-*/
 	$('#current_recording_graph_button').on('click', function(e){
-		// var command = new Object();
-		// command.menu_request = "list_saved_logs";
-		// //command.show_current_log="show_current_log";
-		// //sendCommand(command);
-		// var ul = document.getElementById('saved_recordings_list');
-		// ul.innerHTML = '';
-		// var btn = document.createElement("button");
-		// btn.class = "btn btn-success";
-		// btn.value = "Brisket";
-		/*lvar li = document.createElement("li");
-		li.style.marginBottom = '10px';
-		i.innerHTML ="<div class=\"accordion\" id=\"accordion2\"> \
-                    <div class=\"accordion-group\"> \
-                        <div class=\"accordion-heading\"> \
-                            <a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#collapseTwo\"> \
-                            Brisket 1 \
-                            </a> \
-                         </div> \
-                         <div id=\"collapseTwo\" class=\"accordion-body collapse\"> \
-                             <div class=\"accordion-inner\"> \
-                <button id=\"hystersis_plus_button2\" class=\"btn btn-danger\" type=\"button\">+</button> \
-                 </div> \
-                    </div> \
-                     </div> </div> ";
-		
-		li.innerHTML = "<div style=\"width: 100%; margin-bottom:10px;\"><button  id=\"saved_recording_button" + saved_log_count + "\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#recording_template" + saved_log_count + "\" data-toggle=\"collapse\">Pork Butt</button></div> \
-		<div class=\"cont collapse\" id=\"recording_template" + saved_log_count + "\"> \
-		     <h2> <span class=\"label label-success pull-left\">Name</span><div >Not</div></h2>  \
-		          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >Recording</h2> \
-		           <div class=\"btn-group pull-right\" id=\"current_recording_control\" role=\"group\" aria-label=\"Basic example\">\
-		           <button type=\"button\" class=\"btn btn-primary btn-secondary \" >Stop</button>\
-        <button type=\"button\" class=\"btn btn-warning btn-secondary \" >\
-        Graph</button> \
-    </div>\
-  </div>";
-		ul.appendChild(li);
-
-		var template = document.getElementById("recording_template" + saved_log_count);
-		template.style.marginBottom = '10px';
-		var button = document.getElementById("saved_recording_button" + saved_log_count);
-		saved_log_count += 1;
-		button.addEventListener("click", saved_recording_expand);
-
-		var height = 0;
-		height = parseInt($('#saved_recordings_div').css('height'));
-		var offset = 50;
-
-		$('#saved_recordings_div').css({'height': height + offset});	
-		*/
+	
 		var command = new Object();
 		command.graph_log = "fake.csv";
 		sendCommand(command);
 
 	});
 
-	function saved_recording_expand(e){
-		var height = 0;
-		
-		height = parseInt($('#saved_recordings_div').css('height'));
-		var offset = -160;
-		if($($(this).data("target")).hasClass("collapse"))
-		{			
-			offset *= -1;
-		}
-	
-		$('#saved_recordings_div').css({'height': height + offset});	
-/*
-		if($('this').data('state') == "closed")
-		{
-			height = $('#saved_recordings_div').css('height');
-			$('#saved_recordings_div').css('height') = height + 30;
-			$('this').data('state') == "open";
-		}
-		else
-		{
-			height = $('#saved_recordings_div').css('height');
-			$('#saved_recordings_div').css({'height': height - 30});
-			$('this').data('state') == "closed"
-		}
-*/		
-	}
-		
+
 	
 	$('#new_recording_button').on('click', function(e){
 		var command = new Object();

@@ -165,13 +165,17 @@ h5 {
 }
 
 .graphing{
-  height:380px;
+  height:80px;
 }
 
 .chart{
   height:300px;
   width:95%;
   margin-left:2.5%;
+}
+
+#saved_recordings_div{
+  height:80px;
 }
 
 #hystersis_plus_button{
