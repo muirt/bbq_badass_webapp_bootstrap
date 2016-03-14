@@ -51,7 +51,7 @@
         <div class="navbar-header">
           
           <!-- <button type="button" id="fullscreen_button" class="btn btn-mini pull-right">Fullscreen</button> -->
-          <a class="navbar-brand" href=""><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass</a>
+          <a id="connected_icon" class="navbar-brand" href=""><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass</span></a>
           </div> 
           
           <!-- <div class="navbar-collapse collapse">
@@ -69,10 +69,10 @@
 	  <!-- FIRST ROW OF BLOCKS -->     
       <div class="row">
 
-      <div class="half-unit tiny">
+     <!--  <div class="half-unit tiny">
             <dtitle  id="connected_label">Not Connected</dtitle>         
       </div>
-
+ -->
          
       
 
@@ -199,7 +199,7 @@
              
           </div>
 
-          <div class="half-unit medium">
+         <!--  <div class="half-unit medium">
             <dtitle>Debug </dtitle>
             <hr>     
             <div class="switch pull-right" id="debug_control">
@@ -209,23 +209,24 @@
               <label for="off" class="switch-label switch-label-on">Off</label>
               <span class="switch-selection"></span>
             </div>        
-          </div>   
-          <div class="dash-unit">
+          </div>   --> 
+          
+          <div class="dash-unit current-recording">
             <dtitle>Current Recording</dtitle>
             <hr>
             <div class="cont">               
-             <h2 > <span class="label label-success pull-left">Name</span><div id="current_recording_name">Not</div></h2>
+             <h2 > <span class="label label-warning pull-left">Name</span><div id="current_recording_name">Not</div></h2>
              <h2 ><span class="label label-warning pull-left"> Duration</span><div id="current_recording_duration">Recording</h2>
 
               <div class="btn-group pull-right" id="current_recording_control" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary btn-secondary " id="current_recording_stop_button">Stop</button>
-                <button type="button" class="btn btn-warning btn-secondary " id="current_recording_graph_button">
+                <button type="button" class="btn btn-danger btn-secondary " id="current_recording_stop_button">Stop</button>
+                <button type="button" class="btn btn-primary btn-secondary " id="current_recording_graph_button">
                 Graph</button>
             </div>
           </div>
           </div>
 
-          <div class="half-unit">
+          <div class="half-unit medium">
             <dtitle>New Recording</dtitle>
             <hr>
             <div class="cont"> 
@@ -255,7 +256,7 @@
             
          </div>
 
-          <div class="dash-unit graphing">
+          <div class="half-unit graphing">
             <dtitle>Graphing</dtitle>
             <hr>
             <div class="chart">

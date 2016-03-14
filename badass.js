@@ -1,4 +1,4 @@
-var socketaddyLocal= "ws://192.168.0.2:9001";
+var socketaddyLocal = "ws://192.168.0.9:9001"
 
 
 var socketaddyInternet = "ws://bbqba.ddns.net:9001";
@@ -40,6 +40,14 @@ function graph(data)
 		var full_size = 380;
 		$('.graphing').css({'height': full_size});
 	}
+
+	var chart_height = parseInt($('.chart').css('height'));
+
+	if(chart_height < 300)
+	{
+		var full_size = 300;
+		$('.chart').css({'height': full_size});
+	}	
 
 	for (var j = 1; j < data.length; j++) {
 		var val_meat = parseInt(data[j][0]);
@@ -188,7 +196,7 @@ function saved_recording_expand(e){
 	var height = 0;
 	
 	height = parseInt($('#saved_recordings_div').css('height'));
-	var offset = -160;
+	var offset = -185;
 	if($($(this).data("target")).hasClass("collapse"))
 	{			
 		offset *= -1;
@@ -220,22 +228,21 @@ function saved_recording_delete(e){
 
 function create_recording_button(name, duration)
 {			
-	alert(name);
 	var ul = document.getElementById('saved_recordings_list');
 	var li = document.createElement("li");
 	//li.style.marginTop = '40px';
 	li.style.marginBottom = '10px';
 	
 	li.innerHTML = "<div style=\"width: 100%; margin-bottom:0px;\"><button  id=\"" + name + "_button\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#" + name + "_recording_template\" data-toggle=\"collapse\">" + name + "</button></div> \
-	<div class=\"cont collapse\" style=\"margin-bottom:0px\" id=\"" + name + "_recording_template\"> \
-	     <h2> <span class=\"label label-success pull-left\">Name</span><div >" + name + "</div></h2>  \
+	<div class=\"cont collapse recording_template\" style=\"margin-bottom:0px\" id=\"" + name + "_recording_template\"> \
+	     <h2> <span class=\"label label-warning pull-left\">Name</span><div >" + name + "</div></h2>  \
 	          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >" + duration + "</h2> \
 	           <div class=\"btn-group pull-right\" id=\"current_recording_control\" role=\"group\" aria-label=\"Basic example\">\
-	           <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Delete</button>\
-    		   <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-warning btn-secondary \" >Graph</button> \
-	<div style=\"width:100%; height:10px;\"></div> \	
+	           <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-danger btn-secondary \" >Delete</button>\
+    		   <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Graph</button> \
+	<div style=\"width:100%; height:70px;\"></div> \
 	</div>\
-		</div>";
+		</div> ";
 
 	ul.appendChild(li);
 
@@ -289,7 +296,7 @@ function sendCommand(command)
 
 function calculate_progress(part, whole)
 {	
-	//alert(part + " " + whole);
+	
 	var result = 0;
 
 	if(whole != 0){
@@ -356,7 +363,6 @@ function evaluate_progress()
 	}
 	if(parseInt(grill_width) >= 110)
 	{		
-		//alert(">110");							
 		$('#grill_temp_progress').css({'background': danger_color});
 
 	}
@@ -510,7 +516,6 @@ function handleMessage(evt)
 							}							
 						}						
 						if(updateKeys.indexOf('temperature_units') != -1){
-							//alert(updateObject.temperature_units);
 							if(updateObject.temperature_units == "C" ){
 								document.getElementById("C").checked = true;
 							}
@@ -535,18 +540,21 @@ function displayError()
 {
 	$("#connected_label").text("Error");	
 	$("#connected_label").css({ 'color': 'blue'});
+	$("#connected_icon").css({'color': 'blue'});
 }
 
 function displayDisconnected()
 {
 	$("#connected_label").text("Not Connected");	
 	$("#connected_label").css({ 'color': 'blue'});
+	$("#connected_icon").css({'color': 'blue'});
 }
 
 function displayConnected()
 {
 	$("#connected_label").text("Connected");
 	$("#connected_label").css({ 'color': 'lightgreen'});
+	$("#connected_icon").css({'color': 'lightgreen'});
 }
 
 function configure_modal(title, body, button1, button2)
