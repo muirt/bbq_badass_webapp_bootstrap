@@ -216,13 +216,13 @@ function saved_recording_graph(e){
 }
 
 function saved_recording_delete(e){
-	var name = $(e.target).attr("id");
-	var root = name.split("_delete_button")[0];
-	var command = new Object();
-	command.delete_log = root + ".csv";
-	start_message(command, 1);
-	configure_modal('Confirm', 'Delete this recording?', 'OK', 'Cancel');
-	$('#generic_modal').modal('toggle')
+	// var name = $(e.target).attr("id");
+	// var root = name.split("_delete_button")[0];
+	// var command = new Object();
+	// command.delete_log = root + ".csv";
+	// start_message(command, 1);
+	// configure_modal('Confirm', 'Delete this recording?', 'OK', 'Cancel');
+	// $('#generic_modal').modal('toggle')
 }		
 		
 
@@ -237,9 +237,10 @@ function create_recording_button(name, duration)
 	<div class=\"cont collapse recording_template\" style=\"margin-bottom:0px\" id=\"" + name + "_recording_template\"> \
 	     <h2> <span class=\"label label-warning pull-left\">Name</span><div >" + name + "</div></h2>  \
 	          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >" + duration + "</h2> \
-	           <div class=\"btn-group pull-right\" id=\"current_recording_control\" role=\"group\" aria-label=\"Basic example\">\
-	           <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-danger btn-secondary \" >Delete</button>\
-    		   <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Graph</button> \
+	           <div class=\"btn-group \" style=\"padding-top:10px\"role=\"group\" aria-label=\"Basic example\">\
+	            <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-danger btn-secondary \" >Delete</button>\
+	            <a href=\"/" + name + ".csv\" id=\"" + name + "_data_button\" type=\"button\" class=\"btn btn-xlarge btn-success btn-secondary \" >Raw Data</a> \
+    		    <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Graph</button> \
 	<div style=\"width:100%; height:70px;\"></div> \
 	</div>\
 		</div> ";
@@ -455,6 +456,10 @@ function handleMessage(evt)
 						{		
 							$('#current_recording_name').text(updateObject.details.name);
 							$('#current_recording_duration').text(updateObject.details.time);
+							var height = parseInt($('.current-recording').css('height'));
+							height += 20;
+							$('.current-recording').css({'height': height});
+							$('#current_recording_control').css({'visibility': 'visible'});
 						}
 						break;
 					case "graphing":
@@ -661,6 +666,7 @@ $(document).ready(function(){
 		$('#on_button').css({'color': 'yellow'});
 		$('#auto_button').css({'color': 'white'});
 		$('#off_button').css({'color': 'white'});
+
 		
 	});
 	

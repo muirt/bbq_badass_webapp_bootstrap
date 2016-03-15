@@ -165,10 +165,13 @@ h5 {
 }
 
 .current-recording{
-  height:240px;
+  height:225px;
 }
 
-
+#current_recording_control{
+  padding-top: 15px;
+  visibility: hidden;
+}
 
 .chart{
   height:50px;
