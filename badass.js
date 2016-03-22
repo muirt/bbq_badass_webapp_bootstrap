@@ -2,19 +2,18 @@ var socketaddyLocal = "ws://192.168.0.9:9001"
 
 
 var socketaddyInternet = "ws://bbqba.ddns.net:9001";
-var sock;			
+var sock;	
+var sockState = false;		
 
 var debug_list = [];
 var autoVisible = true;
 var confirmedObjectList = []
 var confirmtedMenu;	
 
-var set_point_temperature = 0;
-var meat_goal_temperature = 0; 
 
 var stored_command = null;
 var required_choice_to_send = 0;
-
+var chart;
 var saved_log_count = 0;
 muted_color = "#999999";
 primary_color = "#428bca";
@@ -39,6 +38,7 @@ function graph(data)
 	{
 		var full_size = 380;
 		$('.graphing').css({'height': full_size});
+		$('.graphing').css({'visibility': 'visible'});
 	}
 
 	var chart_height = parseInt($('.chart').css('height'));
@@ -53,6 +53,7 @@ function graph(data)
 		var val_meat = parseInt(data[j][0]);
 		var val_grill = parseInt(data[j][1]);
 		var time = new Date(data[j][2]).getTime();
+		
 
 		var dataPoint1 = [
 		  time,	 
@@ -68,7 +69,7 @@ function graph(data)
 		grillData.push(dataPoint2);
 	}
 
-	var chart = $(".chart").highcharts({
+	chart = $(".chart").highcharts({
 		chart: {
 		  zoomType: 'x',
 		  type: 'line'
@@ -196,7 +197,7 @@ function saved_recording_expand(e){
 	var height = 0;
 	
 	height = parseInt($('#saved_recordings_div').css('height'));
-	var offset = -185;
+	var offset = -230;
 	if($($(this).data("target")).hasClass("collapse"))
 	{			
 		offset *= -1;
@@ -216,47 +217,54 @@ function saved_recording_graph(e){
 }
 
 function saved_recording_delete(e){
-	// var name = $(e.target).attr("id");
-	// var root = name.split("_delete_button")[0];
-	// var command = new Object();
-	// command.delete_log = root + ".csv";
-	// start_message(command, 1);
-	// configure_modal('Confirm', 'Delete this recording?', 'OK', 'Cancel');
-	// $('#generic_modal').modal('toggle')
+	var name = $(e.target).attr("id");
+	var root = name.split("_delete_button")[0];
+	var command = new Object();
+	command.delete_log = root + ".csv";
+	start_message(command, 1);
+	configure_modal('Confirm', 'Delete this recording?', 'OK', 'Cancel', true);
+	$('#generic_modal').modal('toggle')
+	
 }		
 		
 
-function create_recording_button(name, duration)
+function create_recording_button(name, file, date, duration)
 {			
 	var ul = document.getElementById('saved_recordings_list');
 	var li = document.createElement("li");
 	//li.style.marginTop = '40px';
 	li.style.marginBottom = '10px';
 	
-	li.innerHTML = "<div style=\"width: 100%; margin-bottom:0px;\"><button  id=\"" + name + "_button\" style=\"width: 98%\" class=\"btn btn-xlarge btn-success \" data-target=\"#" + name + "_recording_template\" data-toggle=\"collapse\">" + name + "</button></div> \
-	<div class=\"cont collapse recording_template\" style=\"margin-bottom:0px\" id=\"" + name + "_recording_template\"> \
-	     <h2> <span class=\"label label-warning pull-left\">Name</span><div >" + name + "</div></h2>  \
-	          <h2 ><span class=\"label label-warning pull-left\"> Duration</span><div >" + duration + "</h2> \
-	           <div class=\"btn-group \" style=\"padding-top:10px\"role=\"group\" aria-label=\"Basic example\">\
-	            <button id=\"" + name + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-danger btn-secondary \" >Delete</button>\
-	            <a href=\"/" + name + ".csv\" id=\"" + name + "_data_button\" type=\"button\" class=\"btn btn-xlarge btn-success btn-secondary \" >Raw Data</a> \
-    		    <button id=\"" + name + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Graph</button> \
-	<div style=\"width:100%; height:70px;\"></div> \
-	</div>\
-		</div> ";
+	var htmlString = "<div style=\"width: 95%; margin-bottom:0px;\"><button  id=\"" + file + "_button\" style=\"width: 100%\" class=\"btn btn-xlarge btn-success \" data-target=\"#" + file + "_recording_template\" data-toggle=\"collapse\">" + name + "</button></div> \
+	<div class=\"cont collapse recording_template\"  id=\"" + file + "_recording_template\"> \
+	     <h2> <span class=\" pull-left\" >Name</span><div class=\"pull-right\" style=\"margin-right:10px\" >" + name + "</div></h2>  \
+	     <br> \
+	     <h2> <span class=\"pull-left\" >Date</span><div class=\"pull-right\" >" + date + "</div></h2>  \
+	     <br> \
+	     <h2> <span class=\"pull-left\" style=\"margin-left: 5px; font-size:20px;\"> Duration</span><div class=\"pull-right\" style=\"margin-right:10px\">" + duration + "</h2> \
+	     <br >  \
+	        <div class=\"btn-group\" style=\"float:right; padding-top:30px; padding-bottom:20px; padding-right:10px;\"role=\"group\" aria-label=\"Basic example\">\
+		        <button id=\"" + file + "_delete_button\" type=\"button\" class=\"btn btn-xlarge btn-danger  \" >Delete</button>\
+		        <a href=\"/" + file + ".csv\" id=\"" + file + "_data_button\" type=\"button\" class=\"btn btn-xlarge btn-success btn-secondary \" >Data</a> \
+	    	    <button id=\"" + file + "_graph_button\" type=\"button\" class=\"btn btn-xlarge btn-primary btn-secondary \" >Graph</button> \
+			</div>  \
+		  <br class=\"clear:left\">  \
+	</div> ";
 
+	
+	li.innerHTML = htmlString;
 	ul.appendChild(li);
 
-	var template = document.getElementById(name + "_recording_template");
+	var template = document.getElementById(file + "_recording_template");
 	template.style.marginBottom = '10px';
 	
-	var log_button = document.getElementById(name + "_button");
+	var log_button = document.getElementById(file + "_button");
 	log_button.addEventListener("click", saved_recording_expand);
 
-	var graph_button = document.getElementById(name + "_graph_button");
+	var graph_button = document.getElementById(file + "_graph_button");
 	graph_button.addEventListener("click", saved_recording_graph);
 
-	var delete_button = document.getElementById(name + "_delete_button");
+	var delete_button = document.getElementById(file + "_delete_button");
 	delete_button.addEventListener("click", saved_recording_delete);
 
 	saved_log_count += 1;
@@ -292,7 +300,14 @@ function toggleFullScreen() {
 
 function sendCommand(command)
 {
-	sock.send(JSON.stringify(command));
+	if(sockState)
+	{
+		sock.send(JSON.stringify(command));
+	}
+	else
+	{
+		show_error_modal("Error", "Not Connected", "OK");
+	}
 }
 
 function calculate_progress(part, whole)
@@ -312,6 +327,8 @@ function calculate_progress(part, whole)
 
 function evaluate_progress()
 {
+	var set_point_temperature = parseInt($("#set_point_string").text());
+	var meat_goal_temperature = parseInt($("#goal_meat_input").val());
 	var meat_temp = parseInt($("#meat_temperature_string").text());
 	var grill_temp = parseInt($("#grill_temperature_string").text());
 
@@ -322,6 +339,8 @@ function evaluate_progress()
 	
 	$('#meat_temp_progress').css({'width':meat_width});
 	$('#grill_temp_progress').css({'width':grill_width});
+
+
 
 	if(parseInt(meat_width) < 40)
 	{
@@ -369,6 +388,23 @@ function evaluate_progress()
 	}
 }
 
+function fanControlIndication(on_button)
+{
+	var controls = ["off_button", "on_button", "auto_button" ]
+	var button_colors = ['white', 'white', 'white'];
+	if(on_button < 3)
+	{
+		button_colors[on_button] = 'yellow';
+	}
+
+	controls.forEach(function(control, index)
+	{
+		$('#' + control).css({'color': button_colors[index]});	
+	});
+}
+
+
+
 function handleMessage(evt)
 {
 
@@ -378,162 +414,93 @@ function handleMessage(evt)
 
 		var noSingleQuotes = messageString.replace(/'/g, '"');		
 		
-		
-		var messageObject = JSON.parse(noSingleQuotes);
-		var keys = Object.keys(messageObject);
-		
-		displayConnected();
-		set_point_temperature = parseInt($("#set_point_string").text());
-		meat_goal_temperature = parseInt($("#goal_meat_input").val());
-		evaluate_progress();
-		//debug(messageString);
-		if(keys.indexOf('secret') != -1 && keys.indexOf('target') != -1 && keys.indexOf('value') !=-1)
-		{			
+		var messages = noSingleQuotes.split(";")
 
-			if(messageObject.secret == 'badass')
-			{		
-
-				switch(messageObject.target)
+		messages.forEach(function(message){
+			if(message.length > 1){
+				
+				var messageObject = JSON.parse(message);
+				var keys = Object.keys(messageObject);
+				
+				displayConnected();								
+				
+				if(keys.indexOf('secret') != -1 && keys.indexOf('target') != -1 && keys.indexOf('value') !=-1)
 				{			
-					case "periodic_update":	
 
+					if(messageObject.secret == 'badass')
+					{		
 						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);						
-						if(updateKeys.indexOf('input') != -1) 
-						{	
-							if(updateObject.input.length > 1)
-							{									
-								$("#meat_temperature_string").text(updateObject.input[0].value);
-								$("#grill_temperature_string").text(updateObject.input[1].value);									
-							}
-						}
+						var updateKeys = Object.keys(updateObject);
+						switch(messageObject.target)
+						{							
+							case "graphing":								
+								if(updateKeys.indexOf('graph_data') != -1)
+								{							
+									graph(updateObject.graph_data.graphData);
+								}
+								break;
 					
+							case "saved_logs":									
+								$("ul").empty();
+								$('#saved_recordings_div').css({'height':'80'});									
+									updateObject.logs.forEach(function(recording){
+
+										create_recording_button(recording.name, recording.file, recording.date, recording.duration)						
+									});
+										
+								break;
+
+							case "error":
+								
+								if(updateKeys.indexOf('message') != -1) 
+								{
+									var message = updateObject.message;
+									show_error_modal(message.title, message.body, message.button);
+								}
+								break;
 						
-						if(updateKeys.indexOf('set_point') != -1) 
-						{															
-							$("#set_point_string").text(updateObject.set_point);														
-						}
-						
-						
-						if(updateKeys.indexOf('cook_time') != -1) 
-						{
-							$("#cook_time_string").text(updateObject.cook_time);
-						}
+							case "magic":																
+								updateObject.forEach(function(element){									
+									switch(element.value_type){
+										case "text":
+											$("#" + element.control).text(element.value);
+										case "val":
+											$("#" + element.control).val(element.value);
+											break;
+										case "int":
+											if(element.control == "fan_control_state")
+											{
+												fanControlIndication(element.value);
+											}
+											break;
+										case "bool":
+											switch (element.control)
+											{
+												case "fan_state":											
+													var visibility = (element.value=="true") ? 'visible' : 'hidden';
+													$("#fan_state_icon").css({'visibility': visibility});
+													break;
 
-						if(updateKeys.indexOf('output_state') != -1) 
-						{
-							if(updateObject.output_state=="on")
-							{
-								$("#fan_state_icon").css({'visibility': 'visible'});
-							}
-							else if(updateObject.output_state=="off")
-							{
-								$("#fan_state_icon").css({'visibility': 'hidden'});
-							}								
-						}
-						break;
+												case "temperature_units":
+													document.getElementById("C").checked = element.value;
+													break;
 
-					case "response":
-
-						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);		
-											
-						if(updateKeys.indexOf('hysteresis') != -1) 
-						{
-							$("#hysteresis_input").val(updateObject.hysteresis);
-
-						}
-						if(updateKeys.indexOf('set_point') != -1) 
-						{															
-							$("#set_point_string").text(updateObject.set_point);														
-						}
-
-						break;
-					case "recording":						
-						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);
-						if(updateKeys.indexOf('details') != -1)
-						{		
-							$('#current_recording_name').text(updateObject.details.name);
-							$('#current_recording_duration').text(updateObject.details.time);
-							var height = parseInt($('.current-recording').css('height'));
-							height += 20;
-							$('.current-recording').css({'height': height});
-							$('#current_recording_control').css({'visibility': 'visible'});
-						}
-						break;
-					case "graphing":
-						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);
-						if(updateKeys.indexOf('graph_data') != -1)
-						{							
-							graph(updateObject.graph_data.graphData);
-						}
-						break;
-					case "saved_logs":
-						var updateObject = messageObject.value;		
-						if(!$("ul").has("li").length){
-							
-							updateObject.logs.forEach(function(recording){
-
-								create_recording_button(recording.name, recording.duration)						
-							});
-						}		
-						break;
-					case "initial_update":						
-						var updateObject = messageObject.value;
-						var updateKeys = Object.keys(updateObject);	
-
-						if(updateKeys.indexOf('set_point_value') != -1) 
-						{
-							$("#set_point_string").text(updateObject.set_point_value);
-							set_point_temperature = parseInt($("#set_point_string").text());
-							
-						}		
-
-						if(updateKeys.indexOf('hysteresis') != -1)
-						{
-							$("#hysteresis_input").val(updateObject.hysteresis);
-						}
-						
-						if(updateKeys.indexOf('meat_temperature_goal') != -1)
-						{							
-							$("#goal_meat_input").val(updateObject.meat_temperature_goal);
-							meat_goal_temperature = parseInt($("#goal_meat_input").val());
-						}
-						if(updateKeys.indexOf('fan_control') != -1) 
-						{
-							$('#on_button').css({'color': 'white'});
-							$('#auto_button').css({'color': 'white'});
-							$('#off_button').css({'color': 'white'});
-							
-							if(updateObject.fan_control=="on")
-							{
-								$('#on_button').css({'color': 'yellow'});								
-							}
-							else if(updateObject.fan_control=="off")
-							{
-								$('#off_button').css({'color': 'yellow'});
-							}	
-							else if(updateObject.fan_control=="auto")
-							{
-								$('#auto_button').css({'color': 'yellow'});	
-							}							
-						}						
-						if(updateKeys.indexOf('temperature_units') != -1){
-							if(updateObject.temperature_units == "C" ){
-								document.getElementById("C").checked = true;
-							}
-							else if(updateObject.temperature_units == "F" ){
-								document.getElementById("C").checked = false;
-							}
-							
-							
-						}
-						break;					
-				}				
+												case "current_recording_buttons":
+													var visibility = (element.value=="true") ? 'visible' : 'hidden';
+													$('#current_recording_control').css({'visibility': visibility});
+													break;
+											}
+											break;
+									} 									
+								});
+								evaluate_progress();
+								break;
+						}				
+					}
+				}
+				
 			}
-		}
+		});
 		
 
 
@@ -562,12 +529,29 @@ function displayConnected()
 	$("#connected_icon").css({'color': 'lightgreen'});
 }
 
-function configure_modal(title, body, button1, button2)
+
+
+function configure_modal(title, body, button1, button2, button2_visible)
 {
+	
 	$('#modal_title').text(title);
 	$('#modal_body').text(body);
 	$('#modal_button_1').text(button1);
 	$('#modal_button_2').text(button2);
+
+	if(button2_visible == true)
+	{
+		$('#modal_button_2').css({'visibility': 'visible'});	
+	}
+	else
+	{
+		$('#modal_button_2').css({'visibility': 'hidden'});
+	}
+}
+
+function show_error_modal(title, body, button){
+	configure_modal(title, body, button, "", false);
+	$('#generic_modal').modal('toggle')
 }
 
 function start_message(command, required_choice){
@@ -588,38 +572,43 @@ function complete_message(choice){
 $(document).ready(function(){
 	
 	var localSock = new WebSocket(socketaddyLocal);
-	var internetSock = new WebSocket(socketaddyInternet);
+	//var internetSock = new WebSocket(socketaddyInternet);
 	
 	
 	localSock.onopen = function(){ 
 		sock = localSock;
 		displayConnected();
+		sockState = true;
 	};
 
 	localSock.onclose = function(){
 		displayError();
+		sockState = false;
+
 	};
 	
-	internetSock.onclose = function(){
-		displayError();
-	};
+	// internetSock.onclose = function(){
+	// 	displayError();
+	// 	sockState = false;
+	// };
 	
 	localSock.onerror = function(){
 		//displayError();
 	};
 		
-	internetSock.onopen = function(){
-		sock = internetSock;
-		displayConnected();
-	};
+	// internetSock.onopen = function(){
+	// 	sock = internetSock;
+	// 	displayConnected();
+	// 	sockState = true;
+	// };
 
-	internetSock.onerror = function(){
-		//displayError();
-	 };
+	// internetSock.onerror = function(){
+	// 	//displayError();
+	//  };
 	
-	internetSock.onmessage = function(evt){ 
-		handleMessage(evt);
-	}; 
+	// internetSock.onmessage = function(evt){ 
+	// 	handleMessage(evt);
+	// }; 
 	 
 	localSock.onmessage = function(evt){ 
 		handleMessage(evt);
@@ -713,7 +702,7 @@ $(document).ready(function(){
 		//command.finish_current_log="finish_current_log";
 		command.menu_request = "list_saved_logs";
 		start_message(command, 1);
-		configure_modal('Confirm', 'Stop current recording?', 'OK', 'Cancel');
+		configure_modal('Confirm', 'Stop current recording?', 'OK', 'Cancel', true);
 		$('#generic_modal').modal('toggle')
 	});
 
@@ -733,8 +722,9 @@ $(document).ready(function(){
 		var command = new Object();
 		command.create_new_log=$('#new_recording_input').val();
 		start_message(command, 1);
-		configure_modal('Confirm', 'Start an new recording?', 'OK', 'Cancel');
+		configure_modal('Confirm', 'Start an new recording?', 'OK', 'Cancel', true);
 		$('#generic_modal').modal('toggle')
+		$('#new_recording_input').val("")
 
 	});
 	

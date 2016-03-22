@@ -24,13 +24,7 @@
         padding-top: 60px;
       }
     </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le fav and touch icons -->
+ß
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
@@ -43,40 +37,18 @@
 
   </head>
   <body>
-  
-  	<!-- NAVIGATION MENU -->
 
     <div class="navbar-nav navbar-inverse navbar-fixed-top">
         <div class="container">
         <div class="navbar-header">
-          
-          <!-- <button type="button" id="fullscreen_button" class="btn btn-mini pull-right">Fullscreen</button> -->
           <a id="connected_icon" class="navbar-brand" href=""><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass</span></a>
-          </div> 
-          
-          <!-- <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="index.html" class="menu_link"><i class="icon-home icon-white "></i> Home</a></li>
-              <li><a href="settings.html" class="menu_link"><i class="icon-folder-open icon-white "></i> Settings</a></li>
-              <li><a href="recording.html" class="menu_link"><i class="icon-folder-open icon-white "></i> Recording</a></li>
-            </ul>
-          </div>   -->       
+          </div>          
         </div>
     </div>
 
     <div class="container">
-
-	  <!-- FIRST ROW OF BLOCKS -->     
-      <div class="row">
-
-     <!--  <div class="half-unit tiny">
-            <dtitle  id="connected_label">Not Connected</dtitle>         
-      </div>
- -->
-         
-      
-
-      <!-- LOCAL TIME BLOCK -->
+    
+      <div class="row">   
       		<div class="half-unit">
 	      		<dtitle>Meat Temperature (F)</dtitle>
 	      		<hr>
@@ -86,9 +58,7 @@
               aria-valuemin="0" aria-valuemax="100" id="meat_temp_progress" style="width:0%">            
               </div>
             </div>
-		      	<div class="number_container" id="meat_temperature_string">0</div>
-                   
-          
+		      	<div class="number_container" id="meat_temperature_string">0</div>  
 			</div>
 
      	 <div class="half-unit">
@@ -101,10 +71,7 @@
             </div>
 		      		<div class="number_container" id="grill_temperature_string">0</div>
 			</div>
-
-        
-
-      <!-- LOCAL TIME BLOCK -->
+ 
       		<div class="half-unit">
 	      		<dtitle>Fan Control</dtitle>
               <hr> 
@@ -129,37 +96,21 @@
             </div>
           </div>
             <div class="number_container" id="set_point_string">0</div>
+			   </div>
 
-		      		
-			</div>
 
-    
-        
 
-      <!-- LOCAL TIME BLOCK -->
       		<div class="half-unit">
 	      		<dtitle>Cook Time</dtitle>
-	      		<hr>
-              <!--span aria-hidden="true" class="li_clock fs2 smoker_icon pull-left"></span-->
-
-		      		
+	      		<hr> 
 			      	<div class="number_container" id="cook_time_string">0h00m</div>
-		      	
-         <!--  <div class="dash-unit">
-            <dtitle>Debug </dtitle>
-            <hr>
-            <div class="label label-default wordwrap" id="debug_string"></div>
-            
-           </div>	
-			
-
- -->     
           </div>
+
+
 
           <div class="half-unit medium">
             <dtitle>Hysteresis </dtitle>
-            <hr>      
-            
+            <hr>                  
               <div class="cont"> 
               <div id="hysteresis_control" class="input-group pull-right">
                 <input type="text" id="hysteresis_input" class="form-control" value="0">
@@ -168,9 +119,10 @@
                   <button id="hystersis_minus_button" class="btn btn-primary" type="button">-</button>
                 </span>
               </div>
-            </div>
-            
+            </div>            
           </div>
+
+
 
           <div class="half-unit medium">
             <dtitle>Meat Temperature Goal</span></dtitle>
@@ -185,47 +137,42 @@
             </div>           
           </div>
 
+
+
           <div class="half-unit medium">
             <dtitle>Temperature Units </dtitle>
             <hr>    
-            <div class="switch pull-right" id="unit_control">
-              
+            <div class="switch pull-right" id="unit_control">              
               <input type="radio" class="switch-input" name="unit" value="C" id="C" >
               <label for="C" class="switch-label switch-label-off">C</label>
               <input type="radio" checked="" class="switch-input" name="unit" value="F" id="F">
               <label for="F" class="switch-label switch-label-on">F</label>
               <span class="switch-selection"></span>
-            </div>        
-             
+            </div>               
           </div>
 
-         <!--  <div class="half-unit medium">
-            <dtitle>Debug </dtitle>
-            <hr>     
-            <div class="switch pull-right" id="debug_control">
-              <input type="radio" class="switch-input" name="view" value="on" id="on" >
-              <label for="on" class="switch-label switch-label-off">On</label>
-              <input type="radio" checked="" class="switch-input" name="view" value="off" id="off">
-              <label for="off" class="switch-label switch-label-on">Off</label>
-              <span class="switch-selection"></span>
-            </div>        
-          </div>   --> 
+        
           
           <div class="dash-unit current-recording">
             <dtitle>Current Recording</dtitle>
             <hr>
-            <div class="cont">               
-             <h2 > <span class="label label-warning pull-left">Name</span><div id="current_recording_name">Not</div></h2>
-             <h2 ><span class="label label-warning pull-left"> Duration</span><div id="current_recording_duration">Recording</h2>
-
+            <div class="cont" style="width: 95%;">               
+             <h2 > <span class="pull-left">Name</span><div id="current_recording_name" class="pull-right" >Not Recording</div></h2>
+             <br>
+             <h2><span class="pull-left"> Date</span><div id="current_recording_date" class="pull-right" ></h2>
+             <br>
+             <h2 ><span class="pull-left" > Duration</span><div id="current_recording_duration"class="pull-right" ></h2>
+             <br>
               <div class="btn-group pull-right" id="current_recording_control" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-danger btn-secondary " id="current_recording_stop_button">Stop</button>
-                 <a href="current.csv" id="current_data_button" type="button" class="btn btn-xlarge btn-success btn-secondary " >Data</a>
-                <button type="button" class="btn btn-primary btn-secondary " id="current_recording_graph_button">
+                <button type="button" class="btn btn-xlarge btn-danger btn-secondary " id="current_recording_stop_button">Stop</button>
+                 <a href="current.csv" id="current_data_button" type="button" class="btn btn-data btn-success  " >Data</a>
+                <button type="button" class="btn btn-xlarge btn-primary btn-secondary " id="current_recording_graph_button">
                 Graph</button>
             </div>
           </div>
           </div>
+
+
 
           <div class="half-unit medium">
             <dtitle>New Recording</dtitle>
@@ -240,28 +187,24 @@
             </div>  
           </div>
 
+
+
           <div class="dash-unit" id="saved_recordings_div">
             <dtitle>Saved Recordings</dtitle>
             <hr>
-            <ul id="saved_recordings_list">
-                <!-- <li>
-                  <div style="width: 100%; margin-bottom:10px;"><button id="first_button" class="btn btn-xlarge btn-success" data-target="#btn2" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-danger collapse" id="btn2" data-target="#btn3" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-info collapse" id="btn3" data-target="#btn4" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-warning collapse" id="btn4" data-target="#btn5" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;%"><button class="btn btn-xlarge btn-primary collapse" id="btn5" data-target="#btn6" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-danger collapse" id="btn6" data-target="#btn7" data-toggle="collapse">Collapse</button></div>
-                  <div style="width: 100%; margin-bottom:10px;"><button class="btn btn-xlarge btn-success collapse" id="btn7" data-target="#btn8" data-toggle="collapse">Collapse</button></div>
-                </li> -->
-               </ul>
-            
+            <ul id="saved_recordings_list">                
+               </ul>            
          </div>
 
-          <div class="half-unit graphing">
+
+
+          <div class="half-unit graphing" id="graph" style="visibility:hidden;">
             <dtitle>Graphing</dtitle>
             <hr>
             <div class="chart">
           </div>
+
+
 
           <div class="modal fade" id="generic_modal" tabindex="-1" role="dialog" aria-labelledby="modal_title" aria-hidden="true">
           <div class="modal-dialog">
@@ -279,34 +222,12 @@
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-   
+  
+
       		</div><!-- /row -->
       	</div><!-- /container -->		
 	</div><!-- /footerwrap -->
 
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
-	<!--script type="text/javascript" src="assets/js/lineandbars.js"></script-->
-    
-	<!--script type="text/javascript" src="assets/js/dash-charts.js"></script-->
-	<!--script type="text/javascript" src="assets/js/gauge.js"></script-->
-	
-	<!-- NOTY JAVASCRIPT -->
-	<script type="text/javascript" src="assets/js/noty/jquery.noty.js"></script>
-	<script type="text/javascript" src="assets/js/noty/layouts/top.js"></script>
-	<script type="text/javascript" src="assets/js/noty/layouts/topLeft.js"></script>
-	<script type="text/javascript" src="assets/js/noty/layouts/topRight.js"></script>
-	<script type="text/javascript" src="assets/js/noty/layouts/topCenter.js"></script>
-	
-	<!-- You can add more layouts if you want -->
-	<script type="text/javascript" src="assets/js/noty/themes/default.js"></script>
-    <!-- <script type="text/javascript" src="assets/js/dash-noty.js"></script> This is a Noty bubble when you init the theme-->
-	<!--script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script-->
-	<!--script src="assets/js/jquery.flexslider.js" type="text/javascript"></script-->
-
-    <!--script type="text/javascript" src="assets/js/admin.js"></script-->
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>  
   
 </body></html>

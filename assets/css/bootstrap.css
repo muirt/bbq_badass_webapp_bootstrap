@@ -557,11 +557,16 @@ ol {
   margin-bottom: 10px;
 }
 
+ul{
+  list-style-type: none;
+}
+
 ul ul,
 ol ul,
 ul ol,
 ol ol {
   margin-bottom: 0;
+
 }
 
 .list-unstyled {
