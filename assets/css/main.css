@@ -175,6 +175,14 @@ div h2 div{
   margin-right:10px;
 }
 
+.tic_unit{
+  height:350px;
+}
+
+.tic_button{
+  margin:10px;
+}
+
 .recording_template
 {
   height:200px; 

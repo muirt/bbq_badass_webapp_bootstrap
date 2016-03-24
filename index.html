@@ -24,7 +24,7 @@
         padding-top: 60px;
       }
     </style>
-ß
+
     <link rel="shortcut icon" href="assets/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
@@ -41,7 +41,7 @@
     <div class="navbar-nav navbar-inverse navbar-fixed-top">
         <div class="container">
         <div class="navbar-header">
-          <a id="connected_icon" class="navbar-brand" href=""><span aria-hidden="true" class="li_fire fs1"></span> BBQ Badass</span></a>
+          <a id="connected_icon" class="navbar-brand" href=""><span aria-hidden="true" class="li_fire fs1"></span> Tic Tac Toe</span></a>
           </div>          
         </div>
     </div>
@@ -49,163 +49,28 @@
     <div class="container">
     
       <div class="row">   
-      		<div class="half-unit">
-	      		<dtitle>Meat Temperature (F)</dtitle>
-	      		<hr>
-	      			<!--span aria-hidden="true" class="li_food smoker_icon fs2 pull-left"></span-->
-            <div class="progress pull-left" style="width:55%; margin-left:10px; background:transparent">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
-              aria-valuemin="0" aria-valuemax="100" id="meat_temp_progress" style="width:0%">            
-              </div>
-            </div>
-		      	<div class="number_container" id="meat_temperature_string">0</div>  
-			</div>
-
-     	 <div class="half-unit">
-	      		<dtitle>Grill Temperature (F)</dtitle>
-	      		<hr>
-	      			<div class="progress pull-left" style="width:55%; margin-left:10px; background:transparent">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
-              aria-valuemin="0" aria-valuemax="100" id="grill_temp_progress" style="width:0%">            
-              </div>
-            </div>
-		      		<div class="number_container" id="grill_temperature_string">0</div>
-			</div>
- 
-      		<div class="half-unit">
-	      		<dtitle>Fan Control</dtitle>
-              <hr> 
-              <div class="cont">  
-              <div class="btn-group pull-left" id="fan_control_switch" role="group" aria-label="Basic example">
-                
-                <button type="button" class="btn btn-xlarge btn-info btn-secondary" id="auto_button">Auto</button>
-                <button type="button" class="btn btn-xlarge btn-success btn-secondary" id="on_button">On</button>
-                <button type="button" class="btn btn-xlarge btn-danger btn-secondary" id="off_button">Off</button>
-              </div>
-              <span id="fan_state_icon" aria-hidden="true" class="li_vynil fs2 pull-right"></span>
-              </div>
-              </div>
-
-          <div class="half-unit">
-            <dtitle>Set Point Temperature (F)</dtitle>
+      	   
+          <div class="dash-unit tic_unit">
+            <dtitle>Board</dtitle>
             <hr>
-             <div class="cont"> 
-            <div class="btn-group pull-left" id="set_point_control" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-setpoint btn-primary btn-secondary " id="set_point_increase_button">+</button>
-                <button type="button" class="btn btn-setpoint btn-warning btn-secondary" id="set_point_decrease_button">-</button>
+            <div style="width:100%">
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button1">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button2">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button3">X</button>
+            </div>
+            <div style="width:100%">
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button4">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button5">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button6">X</button>
+            </div>
+            <div style="width:100%">
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button7">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button8">X</button>
+              <button type="button" class="btn btn-xlarge btn-primary tic_button" id="button9">X</button>
             </div>
           </div>
-            <div class="number_container" id="set_point_string">0</div>
-			   </div>
-
-
-
-      		<div class="half-unit">
-	      		<dtitle>Cook Time</dtitle>
-	      		<hr> 
-			      	<div class="number_container" id="cook_time_string">0h00m</div>
-          </div>
-
-
-
-          <div class="half-unit medium">
-            <dtitle>Hysteresis </dtitle>
-            <hr>                  
-              <div class="cont"> 
-              <div id="hysteresis_control" class="input-group pull-right">
-                <input type="text" id="hysteresis_input" class="form-control" value="0">
-                <span class="input-group-btn">
-                  <button id="hystersis_plus_button" class="btn btn-danger" type="button">+</button>
-                  <button id="hystersis_minus_button" class="btn btn-primary" type="button">-</button>
-                </span>
-              </div>
-            </div>            
-          </div>
-
-
-
-          <div class="half-unit medium">
-            <dtitle>Meat Temperature Goal</span></dtitle>
-            <hr> 
-             <div class="cont"> 
-              <div id="goal_meat_control" class="input-group pull-right">
-                <input type="text" id="goal_meat_input" class="form-control" value="0">
-                <span class="input-group-btn">
-                  <button id="goal_meat_save_button" class="btn btn-primary" type="button">Save</button>                 
-                </span>
-              </div>
-            </div>           
-          </div>
-
-
-
-          <div class="half-unit medium">
-            <dtitle>Temperature Units </dtitle>
-            <hr>    
-            <div class="switch pull-right" id="unit_control">              
-              <input type="radio" class="switch-input" name="unit" value="C" id="C" >
-              <label for="C" class="switch-label switch-label-off">C</label>
-              <input type="radio" checked="" class="switch-input" name="unit" value="F" id="F">
-              <label for="F" class="switch-label switch-label-on">F</label>
-              <span class="switch-selection"></span>
-            </div>               
-          </div>
-
-        
-          
-          <div class="dash-unit current-recording">
-            <dtitle>Current Recording</dtitle>
-            <hr>
-            <div class="cont" style="width: 95%;">               
-             <h2 > <span class="pull-left">Name</span><div id="current_recording_name" class="pull-right" >Not Recording</div></h2>
-             <br>
-             <h2><span class="pull-left"> Date</span><div id="current_recording_date" class="pull-right" ></h2>
-             <br>
-             <h2 ><span class="pull-left" > Duration</span><div id="current_recording_duration"class="pull-right" ></h2>
-             <br>
-              <div class="btn-group pull-right" id="current_recording_control" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-xlarge btn-danger btn-secondary " id="current_recording_stop_button">Stop</button>
-                 <a href="current.csv" id="current_data_button" type="button" class="btn btn-data btn-success  " >Data</a>
-                <button type="button" class="btn btn-xlarge btn-primary btn-secondary " id="current_recording_graph_button">
-                Graph</button>
-            </div>
-          </div>
-          </div>
-
-
-
-          <div class="half-unit medium">
-            <dtitle>New Recording</dtitle>
-            <hr>
-            <div class="cont"> 
-              <div id="new_recording_control " class="input-group pull-right">
-                <input type="text" id="new_recording_input" class="form-control pull-right" value="">
-                <span class="input-group-btn">
-                  <button id="new_recording_button" class="btn btn-primary " type="button">Start</button>                 
-                </span>
-              </div>
-            </div>  
-          </div>
-
-
-
-          <div class="dash-unit" id="saved_recordings_div">
-            <dtitle>Saved Recordings</dtitle>
-            <hr>
-            <ul id="saved_recordings_list">                
-               </ul>            
-         </div>
-
-
-
-          <div class="half-unit graphing" id="graph" style="visibility:hidden;">
-            <dtitle>Graphing</dtitle>
-            <hr>
-            <div class="chart">
-          </div>
-
-
-
+                  
+              
           <div class="modal fade" id="generic_modal" tabindex="-1" role="dialog" aria-labelledby="modal_title" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
